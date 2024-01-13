@@ -5,14 +5,27 @@ services:
     container_name: postgres
     hostname: localhost
     ports:
-      - '${DB_SERVER_PORT:-5432}:3306'
+      - '${DB_SERVER_PORT:-5432}:5432'
     environment:
       POSTGRES_USER: ${DB_USER:-dev}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-strongpassword}
-      POSTGRES_DATABASE: ${DB_DATABASE:-article-newsletter-auth}
+      POSTGRES_DB: ${DB_DATABASE:-article-newsletter-auth}
     volumes:
       - db-data:/var/lib/postgresql/data
-    restart: unless-stopped
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    environment:
+      REDIS_HOST: ${REDIS_HOST:-localhost}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-minhasenharedis}
+      REDIS_DB: ${REDIS_DB:-0}
+    ports:
+      - '${REDIS_SERVER_PORT:-6379}:6379'
+    volumes:
+      - db-data:/data
 
 volumes:
-  db-data: 
+  db-data:
+  redis-data:
