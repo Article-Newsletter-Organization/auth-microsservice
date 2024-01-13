@@ -1,3 +1,6 @@
+# JWT keys
+/keys
+
 # compiled output
 /dist
 /node_module
