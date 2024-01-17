@@ -5,6 +5,7 @@ export class InvalidFieldCompositeError extends AppError {
   constructor(
     issues: {
       fieldname: string;
+      value: any;
       message: string;
     }[],
     message?: string,
@@ -13,7 +14,11 @@ export class InvalidFieldCompositeError extends AppError {
       message: message ?? 'Ocorreu erros na validação dos campos!',
       name: 'InvalidFieldCompositeError',
       issues: issues.map((issue) => {
-        return new FieldInvalidError(issue.fieldname, issue.message);
+        return new FieldInvalidError(
+          issue.fieldname,
+          issue.value,
+          issue.message,
+        );
       }),
     });
   }

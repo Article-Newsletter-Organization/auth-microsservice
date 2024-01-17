@@ -37,11 +37,11 @@ export abstract class AppError extends Error {
       issues:
         issuesFormatter && this.issues.length > 0
           ? issuesFormatter(this.issues)
-          : AppError.issuesFormatter(this.issues),
+          : this.issuesFormatter(this.issues),
     };
   }
 
-  static issuesFormatter(issues: AppError[]) {
+  issuesFormatter(issues: AppError[]) {
     return issues.map((issue) => {
       return issue.getHttpReponse();
     });
