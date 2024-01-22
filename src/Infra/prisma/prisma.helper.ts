@@ -1,6 +1,5 @@
 import { INestApplication, Injectable, OnModuleInit } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 
 @Injectable()
 export class PrismaHelper extends PrismaClient implements OnModuleInit {
