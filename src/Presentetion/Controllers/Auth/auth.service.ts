@@ -9,7 +9,10 @@ import {
 } from 'src/Domain/Entities';
 import { BcryptService } from 'src/Infra/bcrypt';
 import { JwtService } from 'src/Infra/jwt';
-import { EmailOrPasswordInvalidError } from 'src/Presentetion/Errors';
+import {
+  EmailOrPasswordInvalidError,
+  TokenExpiredError,
+} from 'src/Presentetion/Errors';
 import { ForbiddenException } from 'src/Presentetion/Exceptions';
 import { SignInDTO } from 'src/Presentetion/Validation/DTO';
 
@@ -55,7 +58,22 @@ export default class AuthService {
     };
   }
 
-  async checkAccessToken(accessToken: string) {}
+  async checkAccessToken(
+    accessToken: string,
+  ): Promise<Omit<AccessTokenEntity, 'expire'>> {
+    const payload = await this.jwtService.decrypt(accessToken);
+    const cacheToken = this.cacheManager.get(payload.uid);
+
+    if (!cacheToken) {
+      throw new ForbiddenException(new TokenExpiredError());
+    }
+
+    return {
+      role: payload.role,
+      userId: payload.uid,
+      token: accessToken,
+    };
+  }
 
   makeTokenPayloadForUserEntity(user: UserEntity): AccessTokenPayloadEntity {
     return {

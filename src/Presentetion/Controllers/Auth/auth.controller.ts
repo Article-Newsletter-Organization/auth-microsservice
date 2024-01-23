@@ -15,7 +15,7 @@ export default class AuthController {
   }
 
   @Post('check-access-token')
-  checkAccessToken(@Body() body: CheckAccessTokenDTO) {
-    return 'É aquila coisa né';
+  checkAccessToken(@Body() { token }: CheckAccessTokenDTO) {
+    return this.authService.checkAccessToken(token);
   }
 }
