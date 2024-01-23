@@ -48,12 +48,14 @@ export default class AuthService {
     this.cacheManager.set(user.id, accessToken);
 
     return {
-      expire: this.configService.get('jwt.expireIn'),
+      expire: this.configService.get<number>('jwt.expiresIn'),
       token: accessToken,
+      userId: user.id,
+      role: user.role,
     };
   }
 
-  async checkAccessToken() {}
+  async checkAccessToken(accessToken: string) {}
 
   makeTokenPayloadForUserEntity(user: UserEntity): AccessTokenPayloadEntity {
     return {

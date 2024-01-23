@@ -15,7 +15,7 @@ export class JwtService {
   async encrypt(payload: AccessTokenPayloadEntity): Promise<string> {
     try {
       const token = await this.jwtService.signAsync(payload, {
-        expiresIn: this.configService.get<string>(`jwt.expiresIn`),
+        expiresIn: `${this.configService.get<string>(`jwt.expiresIn`)}s`,
       });
 
       return token;
