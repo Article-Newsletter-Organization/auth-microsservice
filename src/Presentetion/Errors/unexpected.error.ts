@@ -10,7 +10,7 @@ export class UnexpectedError extends AppError {
     super({
       message:
         attrs.message ??
-        'Este e-mail não foi registrado no sistema, por favor entre em contato com o administrador do sistema.',
+        'Ocorreu um erro inesperado.',
       name: 'UnexpectedError',
       target: attrs?.target,
       stack: attrs?.stack,
