@@ -7,15 +7,15 @@ import * as path from 'path';
 
 const privateKeyPath = path.join(
   __dirname,
-  '../../../',
-  'src/Configuration',
+  '../../../../src',
+  'Configuration',
   'keys',
   'private_key.pem',
 );
 const publicKeyPath = path.join(
   __dirname,
-  '../../../',
-  'src/Configuration',
+  '../../../../src',
+  'Configuration',
   'keys',
   'public_key.pem',
 );

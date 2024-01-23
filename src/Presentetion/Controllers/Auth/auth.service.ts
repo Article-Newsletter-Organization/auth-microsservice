@@ -57,7 +57,6 @@ export default class AuthService {
 
   makeTokenPayloadForUserEntity(user: UserEntity): AccessTokenPayloadEntity {
     return {
-      authorId: '',
       role: user.role,
       uid: user.id,
     };

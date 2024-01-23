@@ -20,6 +20,7 @@ export class JwtService {
 
       return token;
     } catch (error) {
+      console.log(error);
       throw new InternalException();
     }
   }
@@ -30,6 +31,7 @@ export class JwtService {
         await this.jwtService.verifyAsync<AccessTokenPayloadEntity>(ciphertext);
       return payload;
     } catch (error) {
+      console.log(error);
       throw new InternalException();
     }
   }
