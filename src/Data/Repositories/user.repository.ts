@@ -28,7 +28,7 @@ export class UserRepository {
     }
   }
 
-  async getFirst(filters?: UserSearchDTO): Promise<UserEntity> {
+  async getFirst(filters?: UserSearchDTO): Promise<UserEntity | null> {
     try {
       const entity = await this.prismaHelper.user.findFirst({
         where: filters,
@@ -37,10 +37,12 @@ export class UserRepository {
         },
       });
 
-      return {
-        ...entity,
-        role: Role[entity.role],
-      };
+      return entity
+        ? {
+            ...entity,
+            role: Role[entity.role],
+          }
+        : null;
     } catch (e) {
       throw new InternalException();
     }

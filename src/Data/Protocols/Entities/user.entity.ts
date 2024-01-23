@@ -3,6 +3,7 @@ export class UserEntity {
   name: string;
   username: string;
   email: string;
+  password: string;
 
   role: Role;
 }
