@@ -1,5 +1,5 @@
 # JWT keys
-/keys
+keys/
 
 # compiled output
 /dist
