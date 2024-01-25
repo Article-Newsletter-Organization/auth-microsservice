@@ -22,13 +22,12 @@ export class NestHttpExceptionFilter {
 
     if (exception instanceof NestNotFoundException) {
       httpException = new NotFoundException();
-
-      return response.status(httpException.status).json({
-        data: null,
-        error: httpException.getHttpReponse(),
-        timestamp: new Date().toISOString(),
-        path: request.url,
-      });
     }
+    
+    return response.status(httpException.status).json({
+      data: null,
+      error: httpException.getHttpReponse().error,
+      timestamp: new Date().toISOString(),
+    });
   }
 }

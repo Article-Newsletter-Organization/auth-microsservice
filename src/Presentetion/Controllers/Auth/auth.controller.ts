@@ -1,11 +1,13 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
 import {
   CheckAccessTokenDTO,
   SignInDTO,
 } from 'src/Presentetion/Validation/DTO';
 import AuthService from './auth.service';
+import { ResponseLoggerInterceptor } from 'src/Presentetion/Interceptors';
 
 @Controller('/auth')
+@UseInterceptors(ResponseLoggerInterceptor)
 export default class AuthController {
   constructor(private readonly authService: AuthService) {}
 

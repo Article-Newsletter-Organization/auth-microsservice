@@ -15,9 +15,8 @@ export class HttpExceptionFilter {
 
     return response.status(exception.status).json({
       data: null,
-      error: exception.getHttpReponse(),
+      error: exception.getHttpReponse().error,
       timestamp: new Date().toISOString(),
-      path: request.url,
     });
   }
 }
