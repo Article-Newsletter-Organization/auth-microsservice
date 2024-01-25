@@ -2,7 +2,7 @@ import { JwtService as NestJwtService } from '@nestjs/jwt';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AccessTokenPayloadEntity } from 'src/Domain/Entities';
-import { InternalException } from 'src/Presentetion/Exceptions';
+import { InternalException, UnauthorizedException } from 'src/Presentetion/Exceptions';
 import { InvalidAccessTokenError } from 'src/Presentetion/Errors';
 
 @Injectable()
@@ -32,7 +32,7 @@ export class JwtService {
       return payload;
     } catch (error) {
       console.log(error);
-      throw new InternalException();
+      throw new UnauthorizedException(new InvalidAccessTokenError());
     }
   }
 }

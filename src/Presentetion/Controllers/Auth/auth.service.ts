@@ -13,7 +13,7 @@ import {
   EmailOrPasswordInvalidError,
   TokenExpiredError,
 } from 'src/Presentetion/Errors';
-import { ForbiddenException } from 'src/Presentetion/Exceptions';
+import { ForbiddenException, UnauthorizedException } from 'src/Presentetion/Exceptions';
 import { SignInDTO } from 'src/Presentetion/Validation/DTO';
 
 @Injectable()
@@ -65,7 +65,7 @@ export default class AuthService {
     const cacheToken = this.cacheManager.get(payload.uid);
 
     if (!cacheToken) {
-      throw new ForbiddenException(new TokenExpiredError());
+      throw new UnauthorizedException(new TokenExpiredError());
     }
 
     return {
