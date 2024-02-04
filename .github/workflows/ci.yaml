@@ -32,12 +32,12 @@ jobs:
 
     - name: Inject jwt public key
       run: |
-        mkdir -p /src/Configuration/keys
-        cp $JWT_PUBLIC_KEY /src/Configuration/keys/public_key.pem
+        mkdir -p src/Configuration/keys
+        cp $JWT_PUBLIC_KEY src/Configuration/keys/public_key.pem
 
     - name: Inject jwt private key
       run: |
-        cp $JWT_PRIVATE_KEY /src/Configuration/keys/private_key.pem
+        cp $JWT_PRIVATE_KEY src/Configuration/keys/private_key.pem
 
     - name: Run tests
       run: npm run test
