@@ -1,206 +1,58 @@
-## Enpoint: /sign-in
-### Descrição:
-Este Endpoint tem como objetivo permitir que o usuário pegue suas credenciais para permitir requisições com alto privilégio.
+# README
 
-### Métodos HTTP:
-- POST
+Este é o README para o micro-serviço de autenticação do sistema, desenvolvido utilizando o framework NestJS e TypeScript.
 
-### URL:
-- ``http://localhost:3000/auth/sign-in``
+## Requisitos
 
+- **Node.js**: ^16.0
+- **Banco de Dados**: Postgres (versão >= 13.0)
+- **Cache de Tokens**: Redis
 
-## Método POST:
+Certifique-se de que o Node.js está na versão especificada e que os bancos de dados estão configurados corretamente antes de prosseguir.
 
-### Exemplo de Requisição:
+## Instalação
 
+1. Clone este repositório.
+2. Instale as dependências utilizando o comando: `npm install`
+3. Crie um par de chaves RSA e coloque-as no caminho `src/Configuration/keys`. Nomeie o arquivo da chave privada como `private_key.pem` e o da chave pública como `public_key.pem`.
 
-```http
-POST http://localhost:3000/auth/sign-in
-Content-Type: application/json
+   Exemplo de comandos para gerar as chaves:
 
+   ```bash
+   openssl genpkey -algorithm RSA -out src/Configuration/keys/private_key.pem
+   openssl rsa -pubout -in src/Configuration/keys/private_key.pem -out src/Configuration/keys/public_key.pem
+   ```
 
-{
-  "email": "teste@example.com",
-  "password": "strongpassword"
-}
-```
+4. Configure as variáveis de ambiente criando um arquivo `.env`. Use o arquivo `.env.example` como exemplo.
 
+   [Exemplo de arquivo `.env.example`](.env.example)
+5. Use a cli do prisma para gerar as entidades e modelos.
 
-### Exemplo de Resposta:
+    ```bash
+        npx prisma generate
+    ```
+6. Use a cli prisma para inserir o schema no banco de dados.
 
+    ```bash
+        npx prisma migrate dev
+    ```
 
-#### Caso: `Sucesso`
 
-```http 
-Status code: 200
+## Uso
 
-Content-Type: application/json
+O micro-serviço de autenticação possui duas rotas principais:
 
+1. **Login**: Rota para autenticar usuários e obter um token de acesso.
 
-{
-  "data": [
-    {
-      "expire": 3600,
-      "token": "<<BASE64_TOKEN>>",
-      "userId": "<<UUID>>",
-      "role": "USER|ADMIN"
-    }
-  ],
-  "error": null,
-  "timestamp": "2024-01-21 12:05:23"
-}
-```
+2. **Verificar Token**: Rota para verificar a validade do token de acesso.
 
-#### Caso: `Email ou senha incorretos`
+Para obter mais detalhes sobre os endpoints, consulte o arquivo [rotas.md](rotas.md).
 
-```http 
-Status code: 401
+## Contribuidores
+Pessoas que contribuiram com código e ideias para este micro-serviços.
 
-Content-Type: application/json
-
-
-{
-  "data": null,
-  "error": {
-    "message": "Email ou senha incorreto.",
-    "name": "CredentialMissmatchError",
-    "issues": []
-  },
-  "timestamp": "2024-01-21 12:05:23"
-}
-```
-
-
-## Enpoint: /check-access-token
-### Descrição:
-Este Endpoint tem como objetivo checar se o Token de acesso passado é válido e quais são suas informações.
-
-### Métodos HTTP:
-- POST
-
-### URL:
-- ``http://localhost:3000/auth/check-access-token``
-
-
-## Método POST:
-
-### Exemplo de Requisição:
-
-
-```http
-POST http://localhost:3000/auth/check-access-token
-Content-Type: application/json
-
-
-{
-  "token": "<<BASE64_TOKEN>>"
-}
-```
-
-
-### Exemplo de Resposta:
-
-
-#### Caso: `Sucesso`
-
-```http 
-Status code: 200
-
-Content-Type: application/json
-
-
-{
-  "data": [
-    {
-      "token": "<<BASE64_TOKEN>>",
-      "userId": "<<UUID>>",
-      "role": "USER|ADMIN"
-    }
-  ],
-  "error": null,
-  "timestamp": "2024-01-21 12:05:23"
-}
-```
-
-#### Caso: `Token de acesso inválido`
-
-```http 
-Status code: 401
-
-Content-Type: application/json
-
-
-{
-  "data": null,
-  "error": {
-    "message": "Token de acesso fornecido é inválido.",
-    "name": "AccessTokenInvalidError",
-    "issues": []
-  },
-  "timestamp": "2024-01-21 12:05:23"
-}
-```
-
-#### Caso: `Token de acesso expirado`
-
-```http 
-Status code: 401
-
-Content-Type: application/json
-
-
-{
-  "data": null,
-  "error": {
-    "message": "Token de acesso fornecido está expirado, por favor logue-se novamente.",
-    "name": "AccessTokenExpiredError",
-    "issues": []
-  },
-  "timestamp": "2024-01-21 12:05:23"
-}
-```
-
-
-## Enpoint: /health
-### Descrição:
-Este Endpoint tem como objetivo mostrar a saúde da API, se está disponível para uso. Retorna uma resposta descrevendo a saúde do sistema.
-
-### Métodos HTTP:
-- GET
-
-### URL:
-- ``http://localhost:3000/auth/health``
-
-
-## Método GET:
-
-### Exemplo de Requisição:
-
-
-```http
-GET http://localhost:3000/auth/health
-Content-Type: application/json
-
-
-{}
-```
-
-
-### Exemplo de Resposta:
-
-
-#### Caso: `Sucesso`
-
-```http 
-Status code: 200
-
-Content-Type: application/json
-
-
-{
-  "situation": "healthy",
-  "details": null
-}
-```
-
-
+### Emanuel Vasconcelos Nobre
+Criador do projeto e responsável por este micro-serviço.
+#### Redes Sociais
+- [LinkedIn](https://www.linkedin.com/in/emanuel-vasconcelos-404329201/)
+- [GitHub](https://github.com/emanuelvasconnobre)
