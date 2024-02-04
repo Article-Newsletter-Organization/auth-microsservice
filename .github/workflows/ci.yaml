@@ -14,6 +14,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      JWT_PUBLIC_KEY: ${{ secrets.TEST_JWT_PUBLIC_KEY }}
+      JWT_PRIVATE_KEY: ${{ secrets.TEST_JWT_PRIVATE_KEY }}
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -21,10 +25,19 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: 14 # ou a versão desejada
+        node-version: 16
 
     - name: Install dependencies
       run: npm install
+
+    - name: Inject jwt public key
+      run: |
+        mkdir -p /src/Configuration/keys
+        cp $JWT_PUBLIC_KEY /src/Configuration/keys/public_key.pem
+
+    - name: Inject jwt private key
+      run: |
+        cp $JWT_PRIVATE_KEY /src/Configuration/keys/private_key.pem
 
     - name: Run tests
       run: npm run test
