@@ -82,6 +82,22 @@ describe('AuthService', () => {
         'wrongpassword',
       );
     });
+
+    it('should return AccessTokenEntity data when everything is working correctly', async () => {
+      jwtServiceMock.encrypt.mockImplementation(() => 'fakeAccessToken');
+
+      const result = await authService.signIn({
+        email: 'user@example.com',
+        password: 'password',
+      });
+
+      expect(result).toEqual({
+        expire: ConfigModuleMock.configData.jwt.expiresIn,
+        token: 'fakeAccessToken',
+        userId: UserRepositoryMock.userEntityMock.id,
+        role: UserRepositoryMock.userEntityMock.role,
+      });
+    });
   });
 
   afterEach(() => {
