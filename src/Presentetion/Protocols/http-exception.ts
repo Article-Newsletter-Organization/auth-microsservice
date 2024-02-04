@@ -1,10 +1,11 @@
 import { AppError } from './error';
 
-export abstract class HttpException {
+export abstract class HttpException extends Error {
   status: number;
   error: AppError;
 
   constructor(attrs: { status: number; error: AppError }) {
+    super(attrs.error.message);
     this.status = attrs.status;
     this.error = attrs.error;
   }

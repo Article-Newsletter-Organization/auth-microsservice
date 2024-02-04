@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - main
+    - develop
+  pull_request:
+    branches:
+    - main
+    - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      JWT_PUBLIC_KEY: ${{ secrets.TEST_JWT_PUBLIC_KEY }}
+      JWT_PRIVATE_KEY: ${{ secrets.TEST_JWT_PRIVATE_KEY }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Inject jwt public key
+      run: |
+        mkdir -p src/Configuration/keys
+        echo $JWT_PUBLIC_KEY > src/Configuration/keys/public_key.pem
+
+    - name: Inject jwt private key
+      run: |
+        echo $JWT_PRIVATE_KEY > src/Configuration/keys/private_key.pem
+
+    - name: Run tests
+      run: npm run test
+
+    - name: Build
+      run: npm run build

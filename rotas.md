@@ -1,4 +1,4 @@
-## /sign-in
+## Enpoint: /sign-in
 ### Descrição:
 Este Endpoint tem como objetivo permitir que o usuário pegue suas credenciais para permitir requisições com alto privilégio.
 
@@ -66,12 +66,12 @@ Content-Type: application/json
     "name": "CredentialMissmatchError",
     "issues": []
   },
-  "timestamp": "2024-01-21 12:05:23",
+  "timestamp": "2024-01-21 12:05:23"
 }
 ```
 
 
-## /check-access-token
+## Enpoint: /check-access-token
 ### Descrição:
 Este Endpoint tem como objetivo checar se o Token de acesso passado é válido e quais são suas informações.
 
@@ -161,7 +161,7 @@ Content-Type: application/json
 ```
 
 
-## /health
+## Enpoint: /health
 ### Descrição:
 Este Endpoint tem como objetivo mostrar a saúde da API, se está disponível para uso. Retorna uma resposta descrevendo a saúde do sistema.
 
@@ -202,5 +202,3 @@ Content-Type: application/json
   "details": null
 }
 ```
-
-
