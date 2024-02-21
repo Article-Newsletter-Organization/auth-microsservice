@@ -26,7 +26,7 @@ export abstract class AppError extends Error {
     }`;
   }
 
-  getHttpReponse(
+  getLog(
     issuesFormatter?: (issues: AppError[]) => (object | number | string)[],
   ) {
     return {
@@ -34,6 +34,20 @@ export abstract class AppError extends Error {
       name: this.name,
       target: this.target,
       stack: this.stack,
+      issues:
+        issuesFormatter && this.issues.length > 0
+          ? issuesFormatter(this.issues)
+          : this.issuesFormatter(this.issues),
+    };
+  }
+
+  getHttpReponse(
+    issuesFormatter?: (issues: AppError[]) => (object | number | string)[],
+  ) {
+    return {
+      message: this.message,
+      name: this.name,
+      target: this.target,
       issues:
         issuesFormatter && this.issues.length > 0
           ? issuesFormatter(this.issues)

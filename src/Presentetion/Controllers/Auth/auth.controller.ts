@@ -1,10 +1,17 @@
-import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Logger,
+  Post,
+  UseInterceptors,
+} from '@nestjs/common';
 import {
   CheckAccessTokenDTO,
   SignInDTO,
 } from 'src/Presentetion/Validation/DTO';
 import AuthService from './auth.service';
 import { ResponseLoggerInterceptor } from 'src/Presentetion/Interceptors';
+import { GLOBAL_LOGGER_NAME } from 'src/Configuration/const';
 
 @Controller('/auth')
 @UseInterceptors(ResponseLoggerInterceptor)

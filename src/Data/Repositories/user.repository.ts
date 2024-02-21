@@ -24,7 +24,9 @@ export class UserRepository {
         };
       });
     } catch (e) {
-      throw new InternalException();
+      throw new InternalException({
+        stack: e,
+      });
     }
   }
 
@@ -44,7 +46,9 @@ export class UserRepository {
           }
         : null;
     } catch (e) {
-      throw new InternalException();
+      throw new InternalException({
+        stack: e,
+      });
     }
   }
 }
