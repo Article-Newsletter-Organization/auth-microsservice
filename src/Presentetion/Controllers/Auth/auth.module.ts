@@ -9,6 +9,7 @@ import { RedisOptions } from 'src/Infra/redis';
 import config from 'src/Configuration/config';
 import { BcryptService } from 'src/Infra/bcrypt';
 import { JwtModule } from 'src/Infra/jwt';
+import { LoggingModule } from 'src/Domain/logging';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { JwtModule } from 'src/Infra/jwt';
     JwtModule,
     ConfigModule.forRoot({ isGlobal: true, load: [config] }),
     CacheModule.registerAsync(RedisOptions),
+    LoggingModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, UserRepository, BcryptService],
