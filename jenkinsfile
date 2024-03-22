@@ -35,13 +35,13 @@ pipeline {
             }
         }
 
-        // stage('Test') {
-        //     steps {
-        //         nodejs(nodeJSInstallationName: 'NodeJS 21.7.1 - LTS') {
-        //             sh 'npm run test'
-        //         }
-        //     }
-        // }
+        stage('Test') {
+            steps {
+                nodejs(nodeJSInstallationName: 'NodeJS 21.7.1 - LTS') {
+                    sh 'echo "teste"'
+                }
+            }
+        }
 
         stage('Build Docker Image') {
             steps {
