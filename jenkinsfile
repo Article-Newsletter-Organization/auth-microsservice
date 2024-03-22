@@ -3,29 +3,27 @@ pipeline {
 
     environment {
         SERVICE_NAME = "auth-service"
+        YOUR_DOCKERHUB_USERNAME = "emanudoc"
+        ORGANIZATION_NAME = "anp"
         REPOSITORY_TAG = "${YOUR_DOCKERHUB_USERNAME}/${ORGANIZATION_NAME}-${SERVICE_NAME}:${BUILD_ID}"
     }
 
     stages {
-        stage('Checkout') {
+        stage('Instalando as dependências') {
             steps {
-                cleanWs()
-                git credentialsId: 'GitHub', url: "https://github.com/${ORGANIZATION_NAME}/${SERVICE_NAME}"
+                sh 'npm install'
             }
         }
+        
         stage('Build') {
             steps {
                 sh 'npm run build'
             }
         }
+
         stage('Test') {
             steps {
                 sh 'npm run test'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                sh 'echo "É isso ai!'
             }
         }
     }
