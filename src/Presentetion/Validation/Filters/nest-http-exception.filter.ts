@@ -18,12 +18,16 @@ export class NestHttpExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    let httpException: HttpException = new InternalException();
+    let httpException: HttpException = new InternalException({
+      stack: exception.message,
+    });
 
     if (exception instanceof NestNotFoundException) {
       httpException = new NotFoundException();
     }
-    
+
+    response.locals.exception = httpException;
+
     return response.status(httpException.status).json({
       data: null,
       error: httpException.getHttpReponse().error,

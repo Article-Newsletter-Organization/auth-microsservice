@@ -16,12 +16,17 @@ export abstract class HttpException extends Error {
     } - ${Date.now().toString()}`;
   }
 
-  getHttpReponse(
-    issuesFormatter?: (issues: AppError[]) => (object | number | string)[],
-  ) {
+  getHttpReponse() {
     return {
       status: this.status,
       error: this.error.getHttpReponse(),
+    };
+  }
+
+  getLog() {
+    return {
+      status: this.status,
+      error: this.error.getLog(),
     };
   }
 }

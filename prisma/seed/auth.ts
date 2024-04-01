@@ -14,7 +14,7 @@ async function main() {
         name: 'Teste',
         password: await bcrypt.hash(
           'strongpassword',
-          parseInt(process.env['SALT']),
+          parseInt(process.env['SALT'] ?? '12'),
         ),
         role: 'ADMIN',
       },
