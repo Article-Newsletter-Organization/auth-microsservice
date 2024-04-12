@@ -1,17 +1,17 @@
-## Enpoint: /sign-in
-### Descrição:
-Este Endpoint tem como objetivo permitir que o usuário pegue suas credenciais para permitir requisições com alto privilégio.
+## Endpoint: /sign-in
+### Description:
+This endpoint aims to allow the user to retrieve their credentials to enable requests with high privilege.
 
-### Métodos HTTP:
+### HTTP Methods:
 - POST
 
 ### URL:
 - ``http://localhost:3000/auth/sign-in``
 
 
-## Método POST:
+## POST Method:
 
-### Exemplo de Requisição:
+### Request Example:
 
 
 ```http
@@ -20,16 +20,16 @@ Content-Type: application/json
 
 
 {
-  "email": "teste@example.com",
+  "email": "test@example.com",
   "password": "strongpassword"
 }
 ```
 
 
-### Exemplo de Resposta:
+### Response Example:
 
 
-#### Caso: `Sucesso`
+#### Case: `Success`
 
 ```http 
 Status code: 200
@@ -51,7 +51,7 @@ Content-Type: application/json
 }
 ```
 
-#### Caso: `Email ou senha incorretos`
+#### Case: `Incorrect Email or Password`
 
 ```http 
 Status code: 401
@@ -62,7 +62,7 @@ Content-Type: application/json
 {
   "data": null,
   "error": {
-    "message": "Email ou senha incorreto.",
+    "message": "Incorrect email or password.",
     "name": "CredentialMissmatchError",
     "issues": []
   },
@@ -71,20 +71,20 @@ Content-Type: application/json
 ```
 
 
-## Enpoint: /check-access-token
-### Descrição:
-Este Endpoint tem como objetivo checar se o Token de acesso passado é válido e quais são suas informações.
+## Endpoint: /check-access-token
+### Description:
+This endpoint aims to check if the provided access token is valid and retrieve its information.
 
-### Métodos HTTP:
+### HTTP Methods:
 - POST
 
 ### URL:
 - ``http://localhost:3000/auth/check-access-token``
 
 
-## Método POST:
+## POST Method:
 
-### Exemplo de Requisição:
+### Request Example:
 
 
 ```http
@@ -98,10 +98,10 @@ Content-Type: application/json
 ```
 
 
-### Exemplo de Resposta:
+### Response Example:
 
 
-#### Caso: `Sucesso`
+#### Case: `Success`
 
 ```http 
 Status code: 200
@@ -122,7 +122,7 @@ Content-Type: application/json
 }
 ```
 
-#### Caso: `Token de acesso inválido`
+#### Case: `Invalid Access Token`
 
 ```http 
 Status code: 401
@@ -133,7 +133,7 @@ Content-Type: application/json
 {
   "data": null,
   "error": {
-    "message": "Token de acesso fornecido é inválido.",
+    "message": "Provided access token is invalid.",
     "name": "AccessTokenInvalidError",
     "issues": []
   },
@@ -141,7 +141,7 @@ Content-Type: application/json
 }
 ```
 
-#### Caso: `Token de acesso expirado`
+#### Case: `Expired Access Token`
 
 ```http 
 Status code: 401
@@ -152,7 +152,7 @@ Content-Type: application/json
 {
   "data": null,
   "error": {
-    "message": "Token de acesso fornecido está expirado, por favor logue-se novamente.",
+    "message": "Provided access token has expired, please log in again.",
     "name": "AccessTokenExpiredError",
     "issues": []
   },
@@ -161,20 +161,20 @@ Content-Type: application/json
 ```
 
 
-## Enpoint: /health
-### Descrição:
-Este Endpoint tem como objetivo mostrar a saúde da API, se está disponível para uso. Retorna uma resposta descrevendo a saúde do sistema.
+## Endpoint: /health
+### Description:
+This endpoint aims to show the health of the API, if it's available for use. It returns a response describing the system's health.
 
-### Métodos HTTP:
+### HTTP Methods:
 - GET
 
 ### URL:
 - ``http://localhost:3000/auth/health``
 
 
-## Método GET:
+## GET Method:
 
-### Exemplo de Requisição:
+### Request Example:
 
 
 ```http
@@ -186,10 +186,10 @@ Content-Type: application/json
 ```
 
 
-### Exemplo de Resposta:
+### Response Example:
 
 
-#### Caso: `Sucesso`
+#### Case: `Success`
 
 ```http 
 Status code: 200
