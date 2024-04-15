@@ -1,58 +1,58 @@
 # README
 
-Este é o README para o micro-serviço de autenticação do sistema, desenvolvido utilizando o framework NestJS e TypeScript.
+This is the README for the authentication micro-service of the system, developed using the NestJS framework and TypeScript.
 
-## Requisitos
+## Requirements
 
 - **Node.js**: ^16.0
-- **Banco de Dados**: Postgres (versão >= 13.0)
-- **Cache de Tokens**: Redis
+- **Database**: Postgres (version >= 13.0)
+- **Token Cache**: Redis
 
-Certifique-se de que o Node.js está na versão especificada e que os bancos de dados estão configurados corretamente antes de prosseguir.
+Make sure Node.js is in the specified version and that the databases are configured correctly before proceeding.
 
-## Instalação
+## Installation
 
-1. Clone este repositório.
-2. Instale as dependências utilizando o comando: `npm install`
-3. Crie um par de chaves RSA e coloque-as no caminho `src/Configuration/keys`. Nomeie o arquivo da chave privada como `private_key.pem` e o da chave pública como `public_key.pem`.
+1. Clone this repository.
+2. Install dependencies using the command: `npm install`
+3. Generate an RSA key pair and place them in the `src/Configuration/keys` directory. Name the private key file `private_key.pem` and the public key file `public_key.pem`.
 
-   Exemplo de comandos para gerar as chaves:
+   Example commands to generate the keys:
 
    ```bash
    openssl genpkey -algorithm RSA -out src/Configuration/keys/private_key.pem
    openssl rsa -pubout -in src/Configuration/keys/private_key.pem -out src/Configuration/keys/public_key.pem
    ```
 
-4. Configure as variáveis de ambiente criando um arquivo `.env`. Use o arquivo `.env.example` como exemplo.
+4. Configure environment variables by creating a `.env` file. Use the `.env.example` file as an example.
 
-   [Exemplo de arquivo `.env.example`](.env.example)
-5. Use a cli do prisma para gerar as entidades e modelos.
+   [Example `.env.example` file](.env.example)
+5. Use the Prisma CLI to generate entities and models.
 
     ```bash
         npx prisma generate
     ```
-6. Use a cli prisma para inserir o schema no banco de dados.
+6. Use the Prisma CLI to apply the schema to the database.
 
     ```bash
         npx prisma migrate dev
     ```
 
+## Usage
 
-## Uso
+The authentication micro-service has two main routes:
 
-O micro-serviço de autenticação possui duas rotas principais:
+1. **Login**: Route to authenticate users and obtain an access token.
 
-1. **Login**: Rota para autenticar usuários e obter um token de acesso.
+2. **Verify Token**: Route to verify the validity of the access token.
 
-2. **Verificar Token**: Rota para verificar a validade do token de acesso.
+For more details about the endpoints, refer to the [routes.md](routes.md) file.
 
-Para obter mais detalhes sobre os endpoints, consulte o arquivo [rotas.md](rotas.md).
+## Contributors
 
-## Contribuidores
-Pessoas que contribuiram com código e ideias para este micro-serviços.
+People who contributed code and ideas to this micro-service.
 
 ### Emanuel Vasconcelos Nobre
-Criador do projeto e responsável por este micro-serviço.
-#### Redes Sociais
+Creator of the project and responsible for this micro-service.
+#### Social Media
 - [LinkedIn](https://www.linkedin.com/in/emanuel-vasconcelos-404329201/)
 - [GitHub](https://github.com/emanuelvasconnobre)
