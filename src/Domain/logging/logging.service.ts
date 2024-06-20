@@ -1,8 +1,6 @@
 import { Injectable, LoggerService } from '@nestjs/common';
 import { winstonOptions } from 'src/Infra/winston';
-import { HttpException } from 'src/Presentetion/Protocols';
 import { createLogger } from 'winston';
-import { LogModel } from './log.model';
 
 @Injectable()
 export class AppLoggerService implements LoggerService {
@@ -10,12 +8,12 @@ export class AppLoggerService implements LoggerService {
 
   constructor() {}
 
-  log(message: string, name: string, extra: LogModel) {
-    this.logger.info(`[${name}]: ${message}`, { name, ...extra });
+  log(message: string, name: string) {
+    this.logger.info(`[${name}]: ${message}`, { name });
   }
 
-  error(message: string, name: string, extra: LogModel) {
-    this.logger.error(`[${name}]: ${message}`, { name, ...extra });
+  error(message: string, name: string) {
+    this.logger.error(`[${name}]: ${message}`, { name });
   }
 
   warn(message: string, name: string) {
