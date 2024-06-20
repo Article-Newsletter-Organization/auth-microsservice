@@ -1,0 +1,59 @@
+version: '3.9'
+name: auth-service
+services:
+  db:
+    image: postgres:16.3-alpine3.20
+    ports:
+      - '${DB_SERVER_PORT:-5432}:5432'
+    environment:
+      POSTGRES_USER: ${DB_USER:-admin}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-strongpassword}
+      POSTGRES_DB: ${DB_DATABASE:-auth-service}
+    env_file:
+      - ../.env
+    volumes:
+      - auth-service-postgres-data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7.0.15-alpine3.20
+    env_file:
+      - ../.env
+    environment:
+      REDIS_HOST: ${REDIS_HOST:-localhost}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-minhasenharedis}
+      REDIS_DB: ${REDIS_DB:-0}
+    ports:
+      - '${REDIS_SERVER_PORT:-6379}:6379'
+    volumes:
+      - auth-service-redis-data:/data
+
+  api:
+    build:
+      context: ..
+      dockerfile: docker/${APP_ENV_STATUS:-dev}.dockerfile
+    image: auth_service:latest
+    depends_on:
+      - db
+      - redis
+    ports:
+      - '${PORT:-3000}:${PORT:-3000}'
+    volumes:
+      - ./src:/app/src
+    restart: always
+    env_file:
+      - ../.env
+
+  migration:
+    build:
+      context: ..
+      dockerfile: docker/migration/Dockerfile
+    depends_on:
+      - api
+    restart: always
+    env_file:
+      - ../.env
+
+volumes:
+  auth-service-postgres-data:
+  auth-service-redis-data:
