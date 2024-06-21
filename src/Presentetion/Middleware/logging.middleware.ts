@@ -1,4 +1,3 @@
-import { Metrics } from './../../Domain/logging/log.model';
 import { Logger, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
 

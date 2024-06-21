@@ -1,15 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { CustomValidationPipe } from './Presentetion/Validation/Pipes';
-import {
-  HttpExceptionFilter,
-  NestHttpExceptionFilter,
-} from './Presentetion/Validation/Filters';
+import { NestHttpExceptionFilter } from './Presentetion/Validation/Filters';
 import { AppLoggerService } from './Domain/logging';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: new AppLoggerService()
+    logger: new AppLoggerService(),
   });
 
   app.useGlobalPipes(new CustomValidationPipe());
@@ -17,4 +14,5 @@ async function bootstrap() {
 
   await app.listen(process.env['PORT'] ?? 3000);
 }
+
 bootstrap();

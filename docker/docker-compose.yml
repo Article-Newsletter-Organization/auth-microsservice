@@ -31,16 +31,13 @@ services:
   api:
     build:
       context: ..
-      dockerfile: docker/${APP_ENV_STATUS:-dev}.dockerfile
+      dockerfile: docker/Dockerfile
     image: auth_service:latest
     depends_on:
-      - db
       - redis
+      - db
     ports:
       - '${PORT:-3000}:${PORT:-3000}'
-    volumes:
-      - ./src:/app/src
-    restart: always
     env_file:
       - ../.env
 
@@ -49,8 +46,7 @@ services:
       context: ..
       dockerfile: docker/migration/Dockerfile
     depends_on:
-      - api
-    restart: always
+      - db
     env_file:
       - ../.env
 

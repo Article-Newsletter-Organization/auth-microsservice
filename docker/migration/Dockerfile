@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:18.20-alpine3.19
 
 WORKDIR /app
 
@@ -6,4 +6,6 @@ COPY . .
 
 RUN npm install
 
-CMD npx prisma migrate dev -y
+RUN npx prisma generate
+
+CMD npx prisma migrate deploy && npm run seed:auth
