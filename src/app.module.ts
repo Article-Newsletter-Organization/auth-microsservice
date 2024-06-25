@@ -4,10 +4,6 @@ import { HealthModule } from './Presentetion/Controllers/Health/health.module';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './Presentetion/Validation/Filters';
 import { LoggingModule } from './Domain/logging';
-import {
-  LoggingMiddleware,
-  MetricsMiddleware,
-} from './Presentetion/Middleware';
 
 @Module({
   providers: [
@@ -18,10 +14,4 @@ import {
   ],
   imports: [AuthModule, HealthModule, LoggingModule],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(MetricsMiddleware).forRoutes('*');
-
-    consumer.apply(LoggingMiddleware).forRoutes('*');
-  }
-}
+export class AppModule {}
