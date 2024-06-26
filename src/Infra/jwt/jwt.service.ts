@@ -7,6 +7,7 @@ import {
   UnauthorizedException,
 } from 'src/Presentetion/Exceptions';
 import { InvalidAccessTokenError } from 'src/Presentetion/Errors';
+import { TraceSpan } from 'src/Configuration/Decorators/span.decorator';
 
 @Injectable()
 export class JwtService {
@@ -15,6 +16,7 @@ export class JwtService {
     private configService: ConfigService,
   ) {}
 
+  @TraceSpan('Encrypt JWT Payload')
   async encrypt(payload: AccessTokenPayloadEntity): Promise<string> {
     try {
       const token = await this.jwtService.signAsync(payload, {
@@ -30,6 +32,7 @@ export class JwtService {
     }
   }
 
+  @TraceSpan('Decrypt JWT Token')
   async decrypt(ciphertext: string): Promise<AccessTokenPayloadEntity> {
     try {
       const payload =

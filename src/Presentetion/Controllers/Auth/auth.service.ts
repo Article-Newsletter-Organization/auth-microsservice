@@ -1,6 +1,9 @@
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { api } from '@opentelemetry/sdk-node';
+import { TraceSpanActive } from 'src/Configuration/Decorators/span-active.decorator';
+import { TraceSpan } from 'src/Configuration/Decorators/span.decorator';
 import { UserEntity } from 'src/Data/Protocols/Entities';
 import { UserRepository } from 'src/Data/Repositories';
 import {
@@ -26,6 +29,7 @@ export default class AuthService {
     private readonly configService: ConfigService,
   ) {}
 
+  @TraceSpan("Sign In Service")
   async signIn(dto: SignInDTO): Promise<AccessTokenEntity> {
     const user = await this.userRepository.getFirst({
       email: dto.email,

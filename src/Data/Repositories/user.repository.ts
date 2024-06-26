@@ -3,11 +3,13 @@ import { UserSearchDTO } from '../Protocols/DTO';
 import { Role, UserEntity } from '../Protocols/Entities';
 import { InternalException } from 'src/Presentetion/Exceptions';
 import { PrismaHelper, PrismaModule } from 'src/Infra/prisma';
+import { TraceSpan } from 'src/Configuration/Decorators/span.decorator';
 
 @Injectable()
 export class UserRepository {
   constructor(private readonly prismaHelper: PrismaHelper) {}
 
+  @TraceSpan("Get Many User")
   async getMany(filters?: UserSearchDTO): Promise<UserEntity[]> {
     try {
       const entities = await this.prismaHelper.user.findMany({
@@ -30,6 +32,7 @@ export class UserRepository {
     }
   }
 
+  @TraceSpan("Get First User")
   async getFirst(filters?: UserSearchDTO): Promise<UserEntity | null> {
     try {
       const entity = await this.prismaHelper.user.findFirst({
