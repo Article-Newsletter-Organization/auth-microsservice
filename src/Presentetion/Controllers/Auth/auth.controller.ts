@@ -11,7 +11,6 @@ import {
 } from 'src/Presentetion/Validation/DTO';
 import AuthService from './auth.service';
 import { ResponseLoggerInterceptor } from 'src/Presentetion/Interceptors';
-import { GLOBAL_LOGGER_NAME } from 'src/Configuration/const';
 import { TraceSpan } from 'src/Configuration/Decorators/span.decorator';
 
 @Controller('/auth')
