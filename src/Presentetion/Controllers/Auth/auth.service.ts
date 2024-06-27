@@ -1,8 +1,6 @@
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { api } from '@opentelemetry/sdk-node';
-import { TraceSpanActive } from 'src/Configuration/Decorators/span-active.decorator';
 import { TraceSpan } from 'src/Configuration/Decorators/span.decorator';
 import { UserEntity } from 'src/Data/Protocols/Entities';
 import { UserRepository } from 'src/Data/Repositories';
@@ -16,7 +14,10 @@ import {
   EmailOrPasswordInvalidError,
   TokenExpiredError,
 } from 'src/Presentetion/Errors';
-import { ForbiddenException, UnauthorizedException } from 'src/Presentetion/Exceptions';
+import {
+  ForbiddenException,
+  UnauthorizedException,
+} from 'src/Presentetion/Exceptions';
 import { SignInDTO } from 'src/Presentetion/Validation/DTO';
 
 @Injectable()
@@ -29,7 +30,7 @@ export default class AuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  @TraceSpan("Sign In Service")
+  @TraceSpan('Sign In Service')
   async signIn(dto: SignInDTO): Promise<AccessTokenEntity> {
     const user = await this.userRepository.getFirst({
       email: dto.email,
@@ -62,6 +63,7 @@ export default class AuthService {
     };
   }
 
+  @TraceSpan('Check Access Token Service')
   async checkAccessToken(
     accessToken: string,
   ): Promise<Omit<AccessTokenEntity, 'expire'>> {

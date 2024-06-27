@@ -1,28 +1,41 @@
-import { ArgumentsHost, Catch, Inject } from '@nestjs/common';
-import {
-  InternalException,
-  NotFoundException,
-} from 'src/Presentetion/Exceptions';
+import { ArgumentsHost, Catch } from '@nestjs/common';
 import { HttpException } from 'src/Presentetion/Protocols';
-import { Request, Response } from 'express';
-import { AppLoggerService } from 'src/Domain/logging';
+import { Response } from 'express';
+import { SpanStatusCode, context, trace } from '@opentelemetry/api';
 
 @Catch(HttpException)
 export class HttpExceptionFilter {
-  constructor(
-    @Inject(AppLoggerService) private readonly loggerService: AppLoggerService,
-  ) {}
+  private readonly tracer = trace.getTracer('HttpExceptionFilter');
+
+  constructor() {}
 
   catch(exception: HttpException, host: ArgumentsHost) {
+    const span = this.tracer.startSpan(
+      `Http Exception Handler`,
+      {
+        attributes: {
+          'exception.handler': HttpExceptionFilter.name,
+          'exception.type': exception.constructor.name,
+          'exception.message': exception.message,
+        },
+      },
+      context.active(),
+    );
+
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 
     response.locals.exception = exception;
-
-    return response.status(exception.status).json({
+    response.status(exception.status).json({
       data: null,
       error: exception.getHttpReponse().error,
       timestamp: new Date().toISOString(),
     });
+
+    span.recordException(exception);
+    span.setStatus({ code: SpanStatusCode.ERROR, message: exception.message });
+    span.end();
+
+    return response;
   }
 }

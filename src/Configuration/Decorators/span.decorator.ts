@@ -1,6 +1,7 @@
-import { api } from '@opentelemetry/sdk-node';
+import { context, trace } from '@opentelemetry/api';
 
-const tracer = api.trace.getTracer('Global');
+
+const tracer = trace.getTracer('Global');
 
 export function TraceSpan(spanName: string): MethodDecorator {
   return (
@@ -12,10 +13,10 @@ export function TraceSpan(spanName: string): MethodDecorator {
 
     descriptor.value = async function (...args: any[]) {
       const span = tracer.startSpan(spanName);
-      const spanContext = api.trace.setSpan(api.context.active(), span);
+      const spanContext = trace.setSpan(context.active(), span);
 
       try {
-        const result = await api.context.with(spanContext, async () => {
+        const result = await context.with(spanContext, async () => {
           return await originalMethod.apply(this, args);
         });
         return result;

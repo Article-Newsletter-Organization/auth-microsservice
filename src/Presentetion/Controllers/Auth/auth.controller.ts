@@ -12,6 +12,7 @@ import {
 import AuthService from './auth.service';
 import { ResponseLoggerInterceptor } from 'src/Presentetion/Interceptors';
 import { GLOBAL_LOGGER_NAME } from 'src/Configuration/const';
+import { TraceSpan } from 'src/Configuration/Decorators/span.decorator';
 
 @Controller('/auth')
 @UseInterceptors(ResponseLoggerInterceptor)
@@ -19,11 +20,13 @@ export default class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('sign-in')
+  @TraceSpan("Sign In Controller")
   signIn(@Body() body: SignInDTO) {
     return this.authService.signIn(body);
   }
 
   @Post('check-access-token')
+  @TraceSpan("Check Access Token Controller")
   checkAccessToken(@Body() { token }: CheckAccessTokenDTO) {
     return this.authService.checkAccessToken(token);
   }

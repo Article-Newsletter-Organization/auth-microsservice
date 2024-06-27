@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { CustomValidationPipe } from './Presentetion/Validation/Pipes';
-import { NestHttpExceptionFilter } from './Presentetion/Validation/Filters';
+import { HttpExceptionFilter, NestHttpExceptionFilter } from './Presentetion/Validation/Filters';
 import { AppLoggerService } from './Domain/logging';
 import { otelSDK } from './Configuration/instrumentation/tracing';
 
@@ -12,7 +12,7 @@ async function bootstrap() {
   });
 
   app.useGlobalPipes(new CustomValidationPipe());
-  app.useGlobalFilters(new NestHttpExceptionFilter());
+  app.useGlobalFilters(new NestHttpExceptionFilter(), new HttpExceptionFilter());
 
   await app.listen(process.env['PORT'] ?? 3000);
 }
