@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:24-alpine-3.21
 
 WORKDIR /app
 
@@ -6,6 +6,12 @@ WORKDIR /app
 COPY package*.json ./
 
 RUN npm install
+
+RUN apk add --no-cache \
+    openssl \
+    musl \
+    libgcc \
+    zlib 
 
 # generated prisma files
 COPY prisma ./prisma/
