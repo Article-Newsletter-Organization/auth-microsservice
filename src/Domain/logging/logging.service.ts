@@ -1,6 +1,6 @@
 import { Injectable, LoggerService } from '@nestjs/common';
 import { winstonOptions } from 'src/Infra/winston';
-import { HttpException } from 'src/Presentetion/Protocols';
+import { HttpException } from 'src/Presentation/Protocols';
 import { createLogger } from 'winston';
 import { LogModel } from './log.model';
 

@@ -10,12 +10,15 @@ async function main() {
       update: {},
       create: {
         email: 'teste@example.com',
-        username: 'teste',
-        name: 'Teste',
+        firstName: 'Admin',
+        lastName: 'Da Silva',
         password: await bcrypt.hash(
           'strongpassword',
           parseInt(process.env['SALT'] ?? '12'),
         ),
+        phoneCountryCode: 55,
+        phoneNumber: '85999999999',
+
         role: 'ADMIN',
       },
     });

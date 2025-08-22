@@ -1,10 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { CustomValidationPipe } from './Presentetion/Validation/Pipes';
+import { CustomValidationPipe } from './Presentation/Validation/Pipes';
 import {
   HttpExceptionFilter,
   NestHttpExceptionFilter,
-} from './Presentetion/Validation/Filters';
+} from './Presentation/Validation/Filters';
 import { AppLoggerService } from './Domain/logging';
 
 async function bootstrap() {

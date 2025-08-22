@@ -1,4 +1,4 @@
-import { AppError, HttpException } from 'src/Presentetion/Protocols';
+import { AppError, HttpException } from 'src/Presentation/Protocols';
 
 interface MemoryUsageDiff {
   rss: number;

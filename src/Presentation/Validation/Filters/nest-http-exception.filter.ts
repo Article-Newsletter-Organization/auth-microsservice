@@ -7,8 +7,8 @@ import {
 import {
   InternalException,
   NotFoundException,
-} from 'src/Presentetion/Exceptions';
-import { HttpException } from 'src/Presentetion/Protocols';
+} from 'src/Presentation/Exceptions';
+import { HttpException } from 'src/Presentation/Protocols';
 import { Request, Response } from 'express';
 
 @Catch(NestHttpException)

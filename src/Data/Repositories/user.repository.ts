@@ -1,11 +1,14 @@
-import { Injectable, Module } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { UserSearchDTO } from '../Protocols/DTO';
 import { Role, UserEntity } from '../Protocols/Entities';
-import { InternalException } from 'src/Presentetion/Exceptions';
-import { PrismaHelper, PrismaModule } from 'src/Infra/prisma';
+import { InternalException } from 'src/Presentation/Exceptions';
+import { PrismaHelper } from 'src/Infra/prisma';
+import { UnexpectedError } from 'src/Presentation/Errors';
 
 @Injectable()
 export class UserRepository {
+  private readonly logger = new Logger(UserRepository.name);
+
   constructor(private readonly prismaHelper: PrismaHelper) {}
 
   async getMany(filters?: UserSearchDTO): Promise<UserEntity[]> {
@@ -13,7 +16,7 @@ export class UserRepository {
       const entities = await this.prismaHelper.user.findMany({
         where: filters,
         orderBy: {
-          username: 'asc',
+          firstName: 'asc',
         },
       });
 
@@ -24,6 +27,7 @@ export class UserRepository {
         };
       });
     } catch (e) {
+      this.logger.error(e);
       throw new InternalException({
         stack: e,
       });
@@ -35,7 +39,7 @@ export class UserRepository {
       const entity = await this.prismaHelper.user.findFirst({
         where: filters,
         orderBy: {
-          username: 'asc',
+          firstName: 'asc',
         },
       });
 
@@ -46,6 +50,28 @@ export class UserRepository {
           }
         : null;
     } catch (e) {
+      this.logger.error(e);
+      throw new UnexpectedError({
+        stack: e,
+      });
+    }
+  }
+
+  async createOne(userData: Omit<UserEntity, 'id' | 'createdAt' | 'modifiedAt'>) {
+    try {
+      const entity = await this.prismaHelper.user.create({
+        data: userData
+      });
+
+      return entity
+        ? {
+            ...entity,
+            password: undefined,
+            role: Role[entity.role],
+          }
+        : null;
+    } catch (e) {
+      this.logger.error(e);
       throw new InternalException({
         stack: e,
       });

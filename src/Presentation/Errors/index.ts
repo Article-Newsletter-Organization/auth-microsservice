@@ -6,3 +6,4 @@ export * from './invalid-access-token.error';
 export * from './invalid-fields-composite.error';
 export * from './token-expired.error';
 export * from './unexpected.error';
+export * from './user-already-exists.error';

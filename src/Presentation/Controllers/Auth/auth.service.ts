@@ -1,7 +1,7 @@
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { UserEntity } from 'src/Data/Protocols/Entities';
+import { Role, UserEntity } from 'src/Data/Protocols/Entities';
 import { UserRepository } from 'src/Data/Repositories';
 import {
   AccessTokenEntity,
@@ -12,9 +12,11 @@ import { JwtService } from 'src/Infra/jwt';
 import {
   EmailOrPasswordInvalidError,
   TokenExpiredError,
-} from 'src/Presentetion/Errors';
-import { ForbiddenException, UnauthorizedException } from 'src/Presentetion/Exceptions';
-import { SignInDTO } from 'src/Presentetion/Validation/DTO';
+  UserAlreadyExistsError,
+} from 'src/Presentation/Errors';
+import { BadRequestException, ForbiddenException, InternalException, UnauthorizedException } from 'src/Presentation/Exceptions';
+import { SignInDTO } from 'src/Presentation/Validation/DTO';
+import { SignUpDTO } from 'src/Presentation/Validation/DTO/Auth/sign-up.dto';
 
 @Injectable()
 export default class AuthService {
@@ -42,6 +44,44 @@ export default class AuthService {
 
     if (!matchPassword) {
       throw new ForbiddenException(new EmailOrPasswordInvalidError());
+    }
+
+    const accessToken = await this.jwtService.encrypt(
+      this.makeTokenPayloadForUserEntity(user),
+    );
+
+    this.cacheManager.set(user.id, accessToken);
+
+    return {
+      expire: this.configService.get<number>('jwt.expiresIn'),
+      token: accessToken,
+      userId: user.id,
+      role: user.role,
+    };
+  }
+
+  async signUp(dto: SignUpDTO): Promise<AccessTokenEntity> {
+    const getResult = await this.userRepository.getFirst({
+      email: dto.email,
+    });
+
+    if (getResult) {
+      throw new BadRequestException(new UserAlreadyExistsError());
+    }
+
+    const hash = await this.bcryptService.hash(
+      dto.password
+    );
+
+    const user = await this.userRepository.createOne({
+      ...dto,
+      password: hash,
+      isVerified: false,
+      role: Role.USER
+    })
+
+    if (!user) {
+      throw new InternalException();
     }
 
     const accessToken = await this.jwtService.encrypt(

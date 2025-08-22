@@ -1,4 +1,4 @@
-import { AppError } from "src/Presentetion/Protocols";
+import { AppError } from "src/Presentation/Protocols";
 
 export class BadRequestError extends AppError {
   constructor() {

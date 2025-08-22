@@ -2,8 +2,8 @@ import { ValidationPipe } from '@nestjs/common';
 import {
   FieldInvalidError,
   InvalidFieldCompositeError,
-} from 'src/Presentetion/Errors';
-import { BadRequestException } from 'src/Presentetion/Exceptions';
+} from 'src/Presentation/Errors';
+import { BadRequestException } from 'src/Presentation/Exceptions';
 
 export class CustomValidationPipe extends ValidationPipe {
   constructor() {

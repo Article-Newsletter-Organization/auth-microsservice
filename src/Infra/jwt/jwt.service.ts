@@ -5,8 +5,8 @@ import { AccessTokenPayloadEntity } from 'src/Domain/Entities';
 import {
   InternalException,
   UnauthorizedException,
-} from 'src/Presentetion/Exceptions';
-import { InvalidAccessTokenError } from 'src/Presentetion/Errors';
+} from 'src/Presentation/Exceptions';
+import { InvalidAccessTokenError } from 'src/Presentation/Errors';
 
 @Injectable()
 export class JwtService {
