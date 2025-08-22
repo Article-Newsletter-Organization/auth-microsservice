@@ -1,4 +1,4 @@
-FROM node:24-alpine-3.21
+FROM node:24-alpine3.21
 
 WORKDIR /app
 
@@ -16,6 +16,9 @@ RUN apk add --no-cache \
 # generated prisma files
 COPY prisma ./prisma/
 
+# COPY ENV variable
+COPY .env ./
+
 # COPY tsconfig.json file
 COPY tsconfig.json ./
 
@@ -25,11 +28,8 @@ RUN npx prisma generate
 # COPY
 COPY . .
 
-# Buildando a aplicação
-RUN npm run build
-
 # Run and expose the server on port 5000
-EXPOSE 8000
+EXPOSE 3000
 
 # A command to start the server 
-CMD npm run start:prod
+CMD npm run start:dev
