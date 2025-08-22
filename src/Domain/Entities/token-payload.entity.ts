@@ -4,5 +4,6 @@ export class TokenPayloadEntity {
   uid: string;
   role: Role;
   email: string;
-  ex: number;
+  iat?: number;
+  exp?: number;
 }

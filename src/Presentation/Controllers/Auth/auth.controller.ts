@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res, UseInterceptors } from '@nestjs/common';
 import {
   SignInDTO,
   SignUpDTO
@@ -6,9 +6,9 @@ import {
 import AuthService from './auth.service';
 import { ResponseLoggerInterceptor } from 'src/Presentation/Interceptors';
 import { CreatedResponse, OkResponse } from 'src/Presentation/Responses';
-import { BearerToken } from 'src/Presentation/Decorators';
+import { BearerToken, Cookie } from 'src/Presentation/Decorators';
 import { UnauthorizedException } from 'src/Presentation/Exceptions';
-import { HeaderMissingError } from 'src/Presentation/Errors';
+import { CookieMissingError, HeaderMissingError } from 'src/Presentation/Errors';
 import { Response } from 'express';
 
 @Controller('/auth')
@@ -48,7 +48,7 @@ export default class AuthController {
     });
   }
 
-  @Post('check-access-token')
+  @Get('check-access-token')
   async checkAccessToken(@BearerToken() token?: string) {
     if (!token)
       throw new UnauthorizedException(
@@ -56,6 +56,19 @@ export default class AuthController {
       );
 
     const result = await this.authService.checkAccessToken(token);
+    return new OkResponse({
+      data: result,
+    });
+  }
+
+  @Get('refresh-token')
+  async refreshToken(@Cookie("refresh-token") token?: string) {
+    if (!token)
+      throw new UnauthorizedException(
+        new CookieMissingError('refresh-token'),
+      );
+
+    const result = await this.authService.refreshToken(token);
     return new OkResponse({
       data: result,
     });

@@ -2,6 +2,7 @@ export * from './email-or-password-invalid.error';
 export * from './email-unknown.error';
 export * from './field-invalid.error';
 export * from './header-missing.error';
+export * from './cookie-missing.error';
 export * from './invalid-access-token.error';
 export * from './invalid-refresh-token.error';
 export * from './invalid-fields-composite.error';

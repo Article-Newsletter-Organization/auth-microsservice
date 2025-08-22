@@ -141,6 +141,37 @@ export default class AuthService {
     };
   }
 
+  async refreshToken(
+    refreshToken: string,
+  ): Promise<Omit<TokenResponseEntity, 'expire'>> {
+    const payload = await this.jwtService.decrypt(
+      refreshToken,
+      'refresh-token',
+    );
+    const user = await this.userRepository.getFirst({ id: payload.uid });
+
+    if (!user || refreshToken !== user?.refreshToken) throw new UnauthorizedException(new InvalidAccessTokenError());
+
+    const now = Math.floor(Date.now() / 1000);
+
+    if (!payload?.exp || payload.exp < now) throw new UnauthorizedException(new TokenExpiredError());
+
+    const accessToken = await this.jwtService.encrypt(
+      this.makeTokenPayloadForUserEntity(user),
+    );
+
+    this.cacheManager.set(user.id, accessToken);
+
+    return {
+      accessToken: {
+        expire: this.configService.get<number>('jwt.accessToken.expiresIn'),
+        token: accessToken,
+      },
+      role: payload.role,
+      userId: payload.uid,
+    };
+  }
+
   makeTokenPayloadForUserEntity(
     user: UserEntity,
     type: 'access-token' | 'refresh-token' = 'access-token',
@@ -149,11 +180,6 @@ export default class AuthService {
       role: user.role,
       uid: user.id,
       email: user.email,
-      ex: this.configService.get<number>(
-        `jwt.${
-          type == 'access-token' ? 'accessToken' : 'refreshToken'
-        }.expiresIn`,
-      ),
     };
   }
 }
