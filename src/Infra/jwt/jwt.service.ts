@@ -1,7 +1,7 @@
 import { JwtService as NestJwtService } from '@nestjs/jwt';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { AccessTokenPayloadEntity } from 'src/Domain/Entities';
+import { TokenPayloadEntity } from 'src/Domain/Entities';
 import {
   InternalException,
   UnauthorizedException,
@@ -15,12 +15,32 @@ export class JwtService {
     private configService: ConfigService,
   ) {}
 
-  async encrypt(payload: AccessTokenPayloadEntity): Promise<string> {
+  async encrypt(
+    payload: TokenPayloadEntity,
+    type: 'access-token' | 'refresh-token' = 'access-token',
+  ): Promise<string> {
     try {
-      const token = await this.jwtService.signAsync(payload, {
-        expiresIn: `${this.configService.get<string>(`jwt.expiresIn`)}s`,
-        privateKey: this.configService.get<string>(`jwt.privateKey`),
-      });
+      let token: string;
+
+      if (type === 'access-token') {
+        token = await this.jwtService.signAsync(payload, {
+          expiresIn: `${this.configService.get<string>(
+            `jwt.accessToken.expiresIn`,
+          )}s`,
+          privateKey: this.configService.get<string>(
+            `jwt.accessToken.privateKey`,
+          ),
+        });
+      } else {
+        token = await this.jwtService.signAsync(payload, {
+          expiresIn: `${this.configService.get<string>(
+            `jwt.refreshToken.expiresIn`,
+          )}s`,
+          privateKey: this.configService.get<string>(
+            `jwt.refreshToken.privateKey`,
+          ),
+        });
+      }
 
       return token;
     } catch (e) {
@@ -30,15 +50,33 @@ export class JwtService {
     }
   }
 
-  async decrypt(ciphertext: string): Promise<AccessTokenPayloadEntity> {
+  async decrypt(
+    ciphertext: string,
+    type: 'access-token' | 'refresh-token' = 'access-token',
+  ): Promise<TokenPayloadEntity> {
     try {
-      const payload =
-        await this.jwtService.verifyAsync<AccessTokenPayloadEntity>(
+      let payload: TokenPayloadEntity;
+
+      if (type === 'access-token') {
+        payload = await this.jwtService.verifyAsync<TokenPayloadEntity>(
           ciphertext,
           {
-            publicKey: this.configService.get<string>(`jwt.publicKey`),
+            publicKey: this.configService.get<string>(
+              `jwt.accessToken.publicKey`,
+            ),
           },
         );
+      } else {
+        payload = await this.jwtService.verifyAsync<TokenPayloadEntity>(
+          ciphertext,
+          {
+            publicKey: this.configService.get<string>(
+              `jwt.refreshToken.publicKey`,
+            ),
+          },
+        );
+      }
+
       return payload;
     } catch (error) {
       throw new UnauthorizedException(new InvalidAccessTokenError());

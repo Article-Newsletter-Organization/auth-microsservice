@@ -20,24 +20,24 @@ export default class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('sign-in')
-  signIn(@Body() body: SignInDTO) {
-    const result = this.authService.signIn(body);
+  async signIn(@Body() body: SignInDTO) {
+    const result = await this.authService.signIn(body);
     return new OkResponse({
       data: result,
     });
   }
 
   @Post('sign-up')
-  signUp(@Body() body: SignUpDTO) {
-    const result = this.authService.signUp(body);
+  async signUp(@Body() body: SignUpDTO) {
+    const result = await this.authService.signUp(body);
     return new CreatedResponse({
       data: result
     });
   }
 
   @Post('check-access-token')
-  checkAccessToken(@Body() { token }: CheckAccessTokenDTO) {
-    const result = this.authService.checkAccessToken(token);
+  async checkAccessToken(@Body() { token }: CheckAccessTokenDTO) {
+    const result = await this.authService.checkAccessToken(token);
     return new OkResponse({
       data: result,
     });

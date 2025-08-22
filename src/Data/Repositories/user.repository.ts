@@ -77,4 +77,28 @@ export class UserRepository {
       });
     }
   }
+
+  async updateOne(userId: string, userData: Partial<UserEntity>) {
+    try {
+      const entity = await this.prismaHelper.user.update({
+        data: userData,
+        where: {
+          id: userId
+        }
+      });
+
+      return entity
+        ? {
+            ...entity,
+            password: undefined,
+            role: Role[entity.role],
+          }
+        : null;
+    } catch (e) {
+      this.logger.error(e);
+      throw new InternalException({
+        stack: e,
+      });
+    }
+  }
 }

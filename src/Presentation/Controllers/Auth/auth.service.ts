@@ -3,18 +3,21 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Role, UserEntity } from 'src/Data/Protocols/Entities';
 import { UserRepository } from 'src/Data/Repositories';
-import {
-  AccessTokenEntity,
-  AccessTokenPayloadEntity,
-} from 'src/Domain/Entities';
+import { TokenResponseEntity, TokenPayloadEntity } from 'src/Domain/Entities';
 import { BcryptService } from 'src/Infra/bcrypt';
 import { JwtService } from 'src/Infra/jwt';
 import {
   EmailOrPasswordInvalidError,
+  InvalidAccessTokenError,
   TokenExpiredError,
   UserAlreadyExistsError,
 } from 'src/Presentation/Errors';
-import { BadRequestException, ForbiddenException, InternalException, UnauthorizedException } from 'src/Presentation/Exceptions';
+import {
+  BadRequestException,
+  ForbiddenException,
+  InternalException,
+  UnauthorizedException,
+} from 'src/Presentation/Exceptions';
 import { SignInDTO } from 'src/Presentation/Validation/DTO';
 import { SignUpDTO } from 'src/Presentation/Validation/DTO/Auth/sign-up.dto';
 
@@ -28,7 +31,7 @@ export default class AuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  async signIn(dto: SignInDTO): Promise<AccessTokenEntity> {
+  async signIn(dto: SignInDTO): Promise<TokenResponseEntity> {
     const user = await this.userRepository.getFirst({
       email: dto.email,
     });
@@ -49,18 +52,32 @@ export default class AuthService {
     const accessToken = await this.jwtService.encrypt(
       this.makeTokenPayloadForUserEntity(user),
     );
+    const refreshToken = await this.jwtService.encrypt(
+      this.makeTokenPayloadForUserEntity(user),
+      'refresh-token',
+    );
+
+    this.userRepository.updateOne(user.id, {
+      refreshToken,
+    });
 
     this.cacheManager.set(user.id, accessToken);
 
     return {
-      expire: this.configService.get<number>('jwt.expiresIn'),
-      token: accessToken,
+      accessToken: {
+        expire: this.configService.get<number>('jwt.accessToken.expiresIn'),
+        token: accessToken,
+      },
+      refreshToken: {
+        expire: this.configService.get<number>('jwt.refreshToken.expiresIn'),
+        token: refreshToken,
+      },
       userId: user.id,
       role: user.role,
     };
   }
 
-  async signUp(dto: SignUpDTO): Promise<AccessTokenEntity> {
+  async signUp(dto: SignUpDTO): Promise<TokenResponseEntity> {
     const getResult = await this.userRepository.getFirst({
       email: dto.email,
     });
@@ -69,16 +86,14 @@ export default class AuthService {
       throw new BadRequestException(new UserAlreadyExistsError());
     }
 
-    const hash = await this.bcryptService.hash(
-      dto.password
-    );
+    const hash = await this.bcryptService.hash(dto.password);
 
     const user = await this.userRepository.createOne({
       ...dto,
       password: hash,
       isVerified: false,
-      role: Role.USER
-    })
+      role: Role.USER,
+    });
 
     if (!user) {
       throw new InternalException();
@@ -87,12 +102,26 @@ export default class AuthService {
     const accessToken = await this.jwtService.encrypt(
       this.makeTokenPayloadForUserEntity(user),
     );
+    const refreshToken = await this.jwtService.encrypt(
+      this.makeTokenPayloadForUserEntity(user, "refresh-token"),
+      'refresh-token',
+    );
+
+    this.userRepository.updateOne(user.id, {
+      refreshToken,
+    });
 
     this.cacheManager.set(user.id, accessToken);
 
     return {
-      expire: this.configService.get<number>('jwt.expiresIn'),
-      token: accessToken,
+      accessToken: {
+        expire: this.configService.get<number>('jwt.accessToken.expiresIn'),
+        token: accessToken,
+      },
+      refreshToken: {
+        expire: this.configService.get<number>('jwt.refreshToken.expiresIn'),
+        token: refreshToken,
+      },
       userId: user.id,
       role: user.role,
     };
@@ -100,25 +129,34 @@ export default class AuthService {
 
   async checkAccessToken(
     accessToken: string,
-  ): Promise<Omit<AccessTokenEntity, 'expire'>> {
+  ): Promise<Omit<TokenResponseEntity, 'expire'>> {
     const payload = await this.jwtService.decrypt(accessToken);
-    const cacheToken = this.cacheManager.get(payload.uid);
+    const cacheToken = await this.cacheManager.get(payload.uid);
 
     if (!cacheToken) {
       throw new UnauthorizedException(new TokenExpiredError());
     }
 
+    if (accessToken !== cacheToken) {
+      throw new UnauthorizedException(new InvalidAccessTokenError());
+    }
+
     return {
+      accessToken: {
+        expire: this.configService.get<number>('jwt.accessToken.expiresIn'),
+        token: accessToken,
+      },
       role: payload.role,
       userId: payload.uid,
-      token: accessToken,
     };
   }
 
-  makeTokenPayloadForUserEntity(user: UserEntity): AccessTokenPayloadEntity {
+  makeTokenPayloadForUserEntity(user: UserEntity, type: "access-token" | "refresh-token" = "access-token"): TokenPayloadEntity {
     return {
       role: user.role,
       uid: user.id,
+      email: user.email,
+      ex: this.configService.get<number>(`jwt.${type == "access-token" ? "accessToken" : "refreshToken" }.expiresIn`)
     };
   }
 }

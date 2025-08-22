@@ -1,2 +1,2 @@
-export * from './access-token-payload.entity';
-export * from './access-token.entity';
+export * from './token-payload.entity';
+export * from './token-response.entity';

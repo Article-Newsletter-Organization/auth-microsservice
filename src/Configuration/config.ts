@@ -24,8 +24,15 @@ export default () => ({
   },
   jwt: {
     secret: process.env['JWT_SECRET'] || 'secret',
-    expiresIn: process.env['JWT_EXPIRE_TIME'] || 3600,
-    privateKey: process.env['JWT_PRIVATE_KEY'] || getFile('private_key.pem'),
-    publicKey: process.env['JWT_PUBLIC_KEY'] || getFile('public_key.pem'),
+    accessToken: {
+      expiresIn: process.env['JWT_ACCESS_TOKEN_EXPIRE_TIME'] || 3600,
+      privateKey: process.env['JWT_ACCESS_TOKEN_PRIVATE_KEY'] || getFile('private_key.pem'),
+      publicKey: process.env['JWT_ACCESS_TOKEN_PUBLIC_KEY'] || getFile('public_key.pem'),
+    },
+    refreshToken: {
+      expiresIn: process.env['JWT_REFRESH_TOKEN_EXPIRE_TIME'] || 2592000,
+      privateKey: process.env['JWT_REFRESH_TOKEN_PRIVATE_KEY'] || getFile('private_key.pem'),
+      publicKey: process.env['JWT_REFRESH_TOKEN_PUBLIC_KEY'] || getFile('public_key.pem'),
+    },
   },
 });

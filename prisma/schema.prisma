@@ -20,6 +20,7 @@ model User {
   email            String  @unique
   password         String
   isVerified       Boolean @default(false) @map("is_verified")
+  refreshToken     String? @map("refresh_token")
 
   role Role @default(USER)
 

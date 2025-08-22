@@ -8,6 +8,7 @@ export class UserEntity {
   phoneNumber: string;
   profilePicture?: string;
   isVerified: boolean;
+  refreshToken?: string;
   
   role: Role;
   
