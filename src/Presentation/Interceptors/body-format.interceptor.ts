@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { HttpResponse } from '../Protocols';
 
 @Injectable()
 export class ResponseLoggerInterceptor implements NestInterceptor {
@@ -17,8 +18,9 @@ export class ResponseLoggerInterceptor implements NestInterceptor {
     );
   }
   bodyFormatter(body: any) {
+    if (body instanceof HttpResponse) 
     return {
-      data: body,
+      ...(body instanceof HttpResponse ? body : { data: body }),
       error: null,
       timestamp: new Date(),
     };

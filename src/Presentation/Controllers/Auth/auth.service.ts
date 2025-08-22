@@ -36,18 +36,15 @@ export default class AuthService {
       email: dto.email,
     });
 
-    if (!user) {
-      throw new ForbiddenException(new EmailOrPasswordInvalidError());
-    }
+    if (!user) throw new ForbiddenException(new EmailOrPasswordInvalidError());
 
     const matchPassword = this.bcryptService.hashCompare(
       user.password,
       dto.password,
     );
 
-    if (!matchPassword) {
+    if (!matchPassword)
       throw new ForbiddenException(new EmailOrPasswordInvalidError());
-    }
 
     const accessToken = await this.jwtService.encrypt(
       this.makeTokenPayloadForUserEntity(user),
@@ -82,9 +79,7 @@ export default class AuthService {
       email: dto.email,
     });
 
-    if (getResult) {
-      throw new BadRequestException(new UserAlreadyExistsError());
-    }
+    if (getResult) throw new BadRequestException(new UserAlreadyExistsError());
 
     const hash = await this.bcryptService.hash(dto.password);
 
@@ -95,15 +90,13 @@ export default class AuthService {
       role: Role.USER,
     });
 
-    if (!user) {
-      throw new InternalException();
-    }
+    if (!user) throw new InternalException();
 
     const accessToken = await this.jwtService.encrypt(
       this.makeTokenPayloadForUserEntity(user),
     );
     const refreshToken = await this.jwtService.encrypt(
-      this.makeTokenPayloadForUserEntity(user, "refresh-token"),
+      this.makeTokenPayloadForUserEntity(user, 'refresh-token'),
       'refresh-token',
     );
 
@@ -133,13 +126,10 @@ export default class AuthService {
     const payload = await this.jwtService.decrypt(accessToken);
     const cacheToken = await this.cacheManager.get(payload.uid);
 
-    if (!cacheToken) {
-      throw new UnauthorizedException(new TokenExpiredError());
-    }
+    if (!cacheToken) throw new UnauthorizedException(new TokenExpiredError());
 
-    if (accessToken !== cacheToken) {
+    if (accessToken !== cacheToken)
       throw new UnauthorizedException(new InvalidAccessTokenError());
-    }
 
     return {
       accessToken: {
@@ -151,12 +141,19 @@ export default class AuthService {
     };
   }
 
-  makeTokenPayloadForUserEntity(user: UserEntity, type: "access-token" | "refresh-token" = "access-token"): TokenPayloadEntity {
+  makeTokenPayloadForUserEntity(
+    user: UserEntity,
+    type: 'access-token' | 'refresh-token' = 'access-token',
+  ): TokenPayloadEntity {
     return {
       role: user.role,
       uid: user.id,
       email: user.email,
-      ex: this.configService.get<number>(`jwt.${type == "access-token" ? "accessToken" : "refreshToken" }.expiresIn`)
+      ex: this.configService.get<number>(
+        `jwt.${
+          type == 'access-token' ? 'accessToken' : 'refreshToken'
+        }.expiresIn`,
+      ),
     };
   }
 }
