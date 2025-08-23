@@ -6,18 +6,11 @@ import { PrismaHelper } from 'src/Infra/prisma';
 @Injectable()
 export class HealthRepository {
   private readonly logger = new Logger(HealthRepository.name);
-  private redis: Redis;
 
   constructor(
     private readonly prismaHelper: PrismaHelper,
     private configService: ConfigService,
-  ) {
-    this.redis = new Redis({
-      host: this.configService.get<string>(`redis.host`),
-      port: this.configService.get<number>(`redis.port`),
-      password: this.configService.get<string>(`redis.password`),
-    });
-  }
+  ) {}
 
   async checkDatabaseConnection(): Promise<'ok' | 'error'> {
     try {
@@ -25,19 +18,31 @@ export class HealthRepository {
 
       return 'ok';
     } catch (e) {
-      this.logger.error(e);
+      this.logger.error(`Database healthcheck error: ${e.message}`);
       return 'error';
     }
   }
 
   async checkCacheConnection(): Promise<'ok' | 'error'> {
+    const redis = new Redis({
+      host: this.configService.get<string>('redis.host'),
+      port: this.configService.get<number>('redis.port'),
+      password: this.configService.get<string>('redis.password'),
+      lazyConnect: true,
+      maxRetriesPerRequest: 1,
+      enableOfflineQueue: false,
+    });
+
     try {
-      await this.redis.ping();
+      await redis.connect();
+      await redis.ping();
 
       return 'ok';
     } catch (e) {
-      this.logger.error(e);
+      this.logger.error(`Redis healthcheck error: ${e.message}`);
       return 'error';
+    } finally {
+      await redis.quit();
     }
   }
 }
