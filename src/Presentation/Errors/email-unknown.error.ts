@@ -1,10 +1,20 @@
 import { AppError } from '../Protocols';
 
 export class EmailUnknownError extends AppError {
-  constructor() {
+  constructor(
+    i18n: {
+      key?: string;
+      lang?: string;
+      placeholders?: Record<string, string | number>;
+    } = {},
+  ) {
     super({
       message:
-        'Este e-mail não foi registrado no sistema, por favor entre em contato com o administrador do sistema.',
+        'This mail is not registered in the system, please contact the system administrator.',
+      i18n: {
+        ...i18n,
+        key: i18n?.key ?? 'errors.EmailUnknownError',
+      },
       name: 'EmailUnknownError',
     });
   }

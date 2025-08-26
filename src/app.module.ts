@@ -8,6 +8,7 @@ import {
   LoggingMiddleware,
   MetricsMiddleware,
 } from './Presentation/Middleware';
+import { I18nModule } from './Presentation/i18n/i18n.module';
 
 @Module({
   providers: [
@@ -16,7 +17,7 @@ import {
       useClass: HttpExceptionFilter,
     },
   ],
-  imports: [AuthModule, HealthModule, LoggingModule],
+  imports: [AuthModule, HealthModule, LoggingModule, I18nModule],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

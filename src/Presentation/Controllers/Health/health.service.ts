@@ -1,4 +1,4 @@
-import { Get, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { HealthRepository } from 'src/Data/Repositories';
 
 @Injectable()

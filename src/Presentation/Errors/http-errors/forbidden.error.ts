@@ -1,9 +1,16 @@
-import { AppError } from "src/Presentation/Protocols";
+import { AppError } from 'src/Presentation/Protocols';
 
 export class ForbiddenError extends AppError {
-  constructor() {
+  constructor(
+    i18n: {
+      key?: string;
+      lang?: string;
+      placeholders?: Record<string, string | number>;
+    } = {},
+  ) {
     super({
-      message: 'Esta rota proibiu sua requisição.',
+      message: 'This route has blocked your access.',
+      i18n: { ...i18n, key: i18n?.key ?? 'errors.ForbiddenError' },
       name: 'ForbiddenError',
     });
   }

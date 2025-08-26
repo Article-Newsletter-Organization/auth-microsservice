@@ -1,17 +1,12 @@
-import { ArgumentsHost, Catch, Inject } from '@nestjs/common';
-import {
-  InternalException,
-  NotFoundException,
-} from 'src/Presentation/Exceptions';
+import { ArgumentsHost, Catch, Logger } from '@nestjs/common';
 import { HttpException } from 'src/Presentation/Protocols';
-import { Request, Response } from 'express';
-import { AppLoggerService } from 'src/Domain/logging';
+import { Response } from 'express';
+import { I18nService } from 'src/Presentation/i18n/i18n.service';
 
 @Catch(HttpException)
 export class HttpExceptionFilter {
-  constructor(
-    @Inject(AppLoggerService) private readonly loggerService: AppLoggerService,
-  ) {}
+  private readonly logger = new Logger(HttpExceptionFilter.name);
+  private readonly i18nService = I18nService.getInstance();
 
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -19,9 +14,11 @@ export class HttpExceptionFilter {
 
     response.locals.exception = exception;
 
+    this.logger.error(exception);
+
     return response.status(exception.status).json({
       data: null,
-      error: exception.getHttpReponse().error,
+      error: exception.error.getHttpReponse(undefined, response.cookie['lang']),
       timestamp: new Date().toISOString(),
     });
   }

@@ -1,0 +1,125 @@
+{
+  "errors": {
+    "BadRequestError": {
+      "text": "Ocorreu um erro ao receber a requisição, por favor tente novamente.",
+      "metafields": {}
+    },
+    "ForbiddenError": {
+      "text": "Esta rota proibiu sua requisição.",
+      "metafields": {}
+    },
+    "NotFoundError": {
+      "text": "Rota não encontrada, tente outra rota.",
+      "metafields": {}
+    },
+    "UnauthorizedError": {
+      "text": "Ocorreu um erro ao pedir autorização.",
+      "metafields": {}
+    },
+    "CookieMissingError": {
+      "text": "Cookie \"<cookieName>\" é obrigatório.",
+      "metafields": { "<cookieName>": "Nome do cookie requerido" }
+    },
+    "EmailOrPasswordInvalidError": {
+      "text": "E-mail ou senha inválidos.",
+      "metafields": {}
+    },
+    "EmailUnknownError": {
+      "text": "Este e-mail não foi registrado no sistema, por favor entre em contato com o administrador do sistema.",
+      "metafields": {}
+    },
+    "FieldInvalidError": {
+      "text": "Campo \"<fieldname>\" é inválido",
+      "metafields": { "<fieldname>": "Nome do campo inválido" }
+    },
+    "HeaderMissingError": {
+      "text": "Header \"<header>\" é obrigatório.",
+      "metafields": { "<header>": "Nome do header requerido" }
+    },
+    "InvalidAccessTokenError": {
+      "text": "Este Token de acesso não é válido.",
+      "metafields": {}
+    },
+    "InvalidFieldCompositeError": {
+      "text": "Ocorreu erros na validação dos campos!",
+      "metafields": {}
+    },
+    "InvalidRefreshTokenError": {
+      "text": "Este refresh token não é válido.",
+      "metafields": {}
+    },
+    "TokenExpiredError": {
+      "text": "Token está fora da validade, por favor logue-se novamente no sistema.",
+      "metafields": {}
+    },
+    "UnexpectedError": {
+      "text": "Ocorreu um erro inesperado.",
+      "metafields": {}
+    },
+    "UserAlreadyExistsError": {
+      "text": "Já existe um usuário cadastrado com esses dados.",
+      "metafields": {}
+    }
+  },
+  "validation": {
+    "CustomIsArray": {
+      "text": "Campo \"<property>\" precisa ser uma lista de itens.",
+      "metafields": { "<property>": "Nome do campo que deve ser lista" }
+    },
+    "CustomIsDate": {
+      "text": "Campo \"<property>\" precisa ter um formato de data válida.",
+      "metafields": { "<property>": "Nome do campo de data" }
+    },
+    "CustomIsEnum": {
+      "text": "Campo \"<property>\" precisa conter um dos seguintes itens: <items>.",
+      "metafields": {
+        "<property>": "Nome do campo",
+        "<items>": "Itens válidos do enum"
+      }
+    },
+    "CustomIsNotEmpty": {
+      "text": "Campo \"<property>\" não pode estar vazio.",
+      "metafields": { "<property>": "Nome do campo" }
+    },
+    "CustomIsNumber": {
+      "text": "Campo \"<property>\" precisa possuir um formato de número válido.",
+      "metafields": { "<property>": "Nome do campo" }
+    },
+    "CustomIsObject": {
+      "text": "Campo \"<property>\" precisa ser um objeto de chave-valor.",
+      "metafields": { "<property>": "Nome do campo" }
+    },
+    "CustomIsOptional": {
+      "text": "Campo \"<property>\" é opcional.",
+      "metafields": { "<property>": "Nome do campo" }
+    },
+    "CustomIsString": {
+      "text": "Campo \"<property>\" precisa ser do tipo texto.",
+      "metafields": { "<property>": "Nome do campo" }
+    },
+    "CustomMax": {
+      "text": "Campo \"<property>\" pode ser contado até no máximo <length>.",
+      "metafields": {
+        "<property>": "Nome do campo",
+        "<length>": "Número máximo permitido"
+      }
+    },
+    "CustomMaxLength": {
+      "text": "Campo \"<property>\" precisa ter no máximo <length> caractéres",
+      "metafields": {
+        "<property>": "Nome do campo",
+        "<length>": "Número máximo de caracteres"
+      }
+    }
+  },
+  "fallback": {
+    "errorWithoutMessage": {
+      "text": "Erro não descrito pelo sistema, por favor, mostre isso ao suporte.",
+      "metafields": {}
+    },
+    "validationWithoutMessage": {
+      "text": "Esse erro de validação não possui descrição no sistema, por favor, mostre isso ao suporte.",
+      "metafields": {}
+    }
+  }
+}

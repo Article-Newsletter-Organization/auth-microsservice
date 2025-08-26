@@ -1,4 +1,4 @@
-import { Role } from "../../Entities";
+import { Role } from '../../Entities';
 
 export class UserSearchDTO {
   id?: string;
@@ -12,7 +12,6 @@ export class UserSearchDTO {
 
   role?: Role;
 
-  
   createdAt?: Date;
-  modifiedAt?: Date; 
+  modifiedAt?: Date;
 }

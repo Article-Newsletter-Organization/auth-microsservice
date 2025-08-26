@@ -18,7 +18,7 @@ export default () => ({
   redis: {
     host: process.env['REDIS_HOST'] || 'localhost',
     port: process.env['REDIS_PORT'] || 6379,
-    password: process.env['REDIS_PASSWORD'] || "strongpassword",
+    password: process.env['REDIS_PASSWORD'] || 'strongpassword',
   },
   bcrypt: {
     salt: parseInt(process.env['BYCRYP_SALT']) || 12,
@@ -27,13 +27,20 @@ export default () => ({
     secret: process.env['JWT_SECRET'] || 'secret',
     accessToken: {
       expiresIn: process.env['JWT_ACCESS_TOKEN_EXPIRE_TIME'] || 3600,
-      privateKey: process.env['JWT_ACCESS_TOKEN_PRIVATE_KEY'] || getFile('private_key.pem'),
-      publicKey: process.env['JWT_ACCESS_TOKEN_PUBLIC_KEY'] || getFile('public_key.pem'),
+      privateKey:
+        process.env['JWT_ACCESS_TOKEN_PRIVATE_KEY'] ||
+        getFile('private_key.pem'),
+      publicKey:
+        process.env['JWT_ACCESS_TOKEN_PUBLIC_KEY'] || getFile('public_key.pem'),
     },
     refreshToken: {
       expiresIn: process.env['JWT_REFRESH_TOKEN_EXPIRE_TIME'] || 2592000,
-      privateKey: process.env['JWT_REFRESH_TOKEN_PRIVATE_KEY'] || getFile('private_key.pem'),
-      publicKey: process.env['JWT_REFRESH_TOKEN_PUBLIC_KEY'] || getFile('public_key.pem'),
+      privateKey:
+        process.env['JWT_REFRESH_TOKEN_PRIVATE_KEY'] ||
+        getFile('private_key.pem'),
+      publicKey:
+        process.env['JWT_REFRESH_TOKEN_PUBLIC_KEY'] ||
+        getFile('public_key.pem'),
     },
   },
 });

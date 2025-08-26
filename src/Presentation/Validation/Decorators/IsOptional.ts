@@ -2,13 +2,20 @@ import { applyDecorators } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, ValidationOptions } from 'class-validator';
 
-export function CustomIsOptional(config: ValidationOptions = {}) {
+export function CustomIsOptional({
+  context,
+  ...config
+}: ValidationOptions = {}) {
   return applyDecorators(
     IsOptional({
       message: ({ property }) => {
-        return `Campo ${property} é opcional.`;
+        return `Property ${property} is opcional.`;
       },
-      ...config
+      context: {
+        ...(context ? context : {}),
+        key: 'validation.CustomIsOptional',
+      },
+      ...config,
     }),
     ApiProperty(),
   );

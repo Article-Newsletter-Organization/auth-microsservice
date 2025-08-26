@@ -57,10 +57,12 @@ export class UserRepository {
     }
   }
 
-  async createOne(userData: Omit<UserEntity, 'id' | 'createdAt' | 'modifiedAt'>) {
+  async createOne(
+    userData: Omit<UserEntity, 'id' | 'createdAt' | 'modifiedAt'>,
+  ) {
     try {
       const entity = await this.prismaHelper.user.create({
-        data: userData
+        data: userData,
       });
 
       return entity
@@ -83,8 +85,8 @@ export class UserRepository {
       const entity = await this.prismaHelper.user.update({
         data: userData,
         where: {
-          id: userId
-        }
+          id: userId,
+        },
       });
 
       return entity

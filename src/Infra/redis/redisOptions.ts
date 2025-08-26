@@ -10,7 +10,7 @@ export const RedisOptions: CacheModuleAsyncOptions = {
       ttl: configService.get('jwt.expiresIn'),
       socket: {
         host: configService.get<string>('redis.host'),
-        port: parseInt(configService.get<string>('redis.port')!),
+        port: parseInt(configService.get<string>('redis.port') ?? '6379'),
       },
     });
     return {

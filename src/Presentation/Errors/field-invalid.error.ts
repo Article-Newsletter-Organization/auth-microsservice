@@ -3,9 +3,26 @@ import { AppError } from '../Protocols';
 export class FieldInvalidError extends AppError {
   value: any;
 
-  constructor(fieldname: string, value: any, message: string) {
+  constructor(
+    fieldname: string,
+    value: any,
+    i18n: {
+      key?: string;
+      lang?: string;
+      placeholders?: Record<string, string | number>;
+    } = {},
+    message: string,
+  ) {
     super({
       message,
+      i18n: {
+        ...i18n,
+        key: i18n?.key ?? 'errors.FieldInvalidError',
+        placeholders: {
+          fieldname,
+          ...(i18n?.placeholders ? i18n.placeholders : {}),
+        },
+      },
       name: 'FieldInvalidError',
       target: fieldname,
     });

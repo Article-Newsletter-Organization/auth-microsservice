@@ -1,0 +1,125 @@
+{
+  "errors": {
+    "BadRequestError": {
+      "text": "An error occurred while receiving the request, please try again.",
+      "metafields": {}
+    },
+    "ForbiddenError": {
+      "text": "This route has forbidden your request.",
+      "metafields": {}
+    },
+    "NotFoundError": {
+      "text": "Route not found, please try another route.",
+      "metafields": {}
+    },
+    "UnauthorizedError": {
+      "text": "An error occurred while requesting authorization.",
+      "metafields": {}
+    },
+    "CookieMissingError": {
+      "text": "Cookie \"<cookieName>\" is required.",
+      "metafields": { "<cookieName>": "Required cookie name" }
+    },
+    "EmailOrPasswordInvalidError": {
+      "text": "Invalid email or password.",
+      "metafields": {}
+    },
+    "EmailUnknownError": {
+      "text": "This email is not registered in the system, please contact the system administrator.",
+      "metafields": {}
+    },
+    "FieldInvalidError": {
+      "text": "Field \"<fieldname>\" is invalid.",
+      "metafields": { "<fieldname>": "Name of the invalid field" }
+    },
+    "HeaderMissingError": {
+      "text": "Header \"<header>\" is required.",
+      "metafields": { "<header>": "Required header name" }
+    },
+    "InvalidAccessTokenError": {
+      "text": "This access token is invalid.",
+      "metafields": {}
+    },
+    "InvalidFieldCompositeError": {
+      "text": "There were errors validating the fields!",
+      "metafields": {}
+    },
+    "InvalidRefreshTokenError": {
+      "text": "This refresh token is invalid.",
+      "metafields": {}
+    },
+    "TokenExpiredError": {
+      "text": "Token has expired, please log in again.",
+      "metafields": {}
+    },
+    "UnexpectedError": {
+      "text": "An unexpected error occurred.",
+      "metafields": {}
+    },
+    "UserAlreadyExistsError": {
+      "text": "A user with this information already exists.",
+      "metafields": {}
+    }
+  },
+  "validation": {
+    "CustomIsArray": {
+      "text": "Field \"<property>\" must be a list of items.",
+      "metafields": { "<property>": "Field name that must be a list" }
+    },
+    "CustomIsDate": {
+      "text": "Field \"<property>\" must be a valid date.",
+      "metafields": { "<property>": "Date field name" }
+    },
+    "CustomIsEnum": {
+      "text": "Field \"<property>\" must contain one of the following items: <items>.",
+      "metafields": {
+        "<property>": "Field name",
+        "<items>": "Valid enum items"
+      }
+    },
+    "CustomIsNotEmpty": {
+      "text": "Field \"<property>\" cannot be empty.",
+      "metafields": { "<property>": "Field name" }
+    },
+    "CustomIsNumber": {
+      "text": "Field \"<property>\" must be a valid number.",
+      "metafields": { "<property>": "Field name" }
+    },
+    "CustomIsObject": {
+      "text": "Field \"<property>\" must be a key-value object.",
+      "metafields": { "<property>": "Field name" }
+    },
+    "CustomIsOptional": {
+      "text": "Field \"<property>\" is optional.",
+      "metafields": { "<property>": "Field name" }
+    },
+    "CustomIsString": {
+      "text": "Field \"<property>\" must be a string.",
+      "metafields": { "<property>": "Field name" }
+    },
+    "CustomMax": {
+      "text": "Field \"<property>\" can have at most <length> items.",
+      "metafields": {
+        "<property>": "Field name",
+        "<length>": "Maximum allowed number"
+      }
+    },
+    "CustomMaxLength": {
+      "text": "Field \"<property>\" can have at most <length> characters.",
+      "metafields": {
+        "<property>": "Field name",
+        "<length>": "Maximum number of characters"
+      }
+    }
+  },
+  "fallback": {
+    "errorWithoutMessage": {
+      "text": "An undescribed error occurred, please show this to support.",
+      "metafields": {}
+    },
+    "validationWithoutMessage": {
+      "text": "This validation error has no description in the system, please show this to support.",
+      "metafields": {}
+    }
+  }
+}

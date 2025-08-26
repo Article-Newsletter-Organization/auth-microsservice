@@ -1,6 +1,7 @@
 import {
   ArgumentsHost,
   Catch,
+  Logger,
   HttpException as NestHttpException,
   NotFoundException as NestNotFoundException,
 } from '@nestjs/common';
@@ -13,6 +14,8 @@ import { Request, Response } from 'express';
 
 @Catch(NestHttpException)
 export class NestHttpExceptionFilter {
+  private readonly logger = new Logger(NestHttpExceptionFilter.name);
+
   catch(exception: NestHttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
@@ -28,9 +31,14 @@ export class NestHttpExceptionFilter {
 
     response.locals.exception = httpException;
 
+    this.logger.error(httpException);
+
     return response.status(httpException.status).json({
       data: null,
-      error: httpException.getHttpReponse().error,
+      error: httpException.error.getHttpReponse(
+        undefined,
+        response.cookie['lang'],
+      ),
       timestamp: new Date().toISOString(),
     });
   }

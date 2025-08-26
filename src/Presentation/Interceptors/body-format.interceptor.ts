@@ -18,11 +18,11 @@ export class ResponseLoggerInterceptor implements NestInterceptor {
     );
   }
   bodyFormatter(body: any) {
-    if (body instanceof HttpResponse) 
-    return {
-      ...(body instanceof HttpResponse ? body : { data: body }),
-      error: null,
-      timestamp: new Date(),
-    };
+    if (body instanceof HttpResponse)
+      return {
+        ...(body instanceof HttpResponse ? body : { data: body }),
+        error: null,
+        timestamp: new Date(),
+      };
   }
 }

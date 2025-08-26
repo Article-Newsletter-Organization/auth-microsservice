@@ -1,9 +1,19 @@
 import { AppError } from '../Protocols';
 
 export class EmailOrPasswordInvalidError extends AppError {
-  constructor() {
+  constructor(
+    i18n: {
+      key?: string;
+      lang?: string;
+      placeholders?: Record<string, string | number>;
+    } = {},
+  ) {
     super({
-      message: 'E-mail ou senha inválidos.',
+      message: 'Email or password is invalid.',
+      i18n: {
+        ...i18n,
+        key: i18n?.key ?? 'errors.EmailOrPasswordInvalidError',
+      },
       name: 'EmailOrPasswordInvalidError',
     });
   }

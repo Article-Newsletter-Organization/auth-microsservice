@@ -9,11 +9,11 @@ export class UserEntity {
   profilePicture?: string;
   isVerified: boolean;
   refreshToken?: string;
-  
+
   role: Role;
-  
+
   createdAt: Date;
-  modifiedAt: Date; 
+  modifiedAt: Date;
 }
 
 export enum Role {

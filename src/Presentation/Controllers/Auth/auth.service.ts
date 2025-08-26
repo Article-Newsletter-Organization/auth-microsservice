@@ -96,7 +96,7 @@ export default class AuthService {
       this.makeTokenPayloadForUserEntity(user),
     );
     const refreshToken = await this.jwtService.encrypt(
-      this.makeTokenPayloadForUserEntity(user, 'refresh-token'),
+      this.makeTokenPayloadForUserEntity(user),
       'refresh-token',
     );
 
@@ -150,11 +150,13 @@ export default class AuthService {
     );
     const user = await this.userRepository.getFirst({ id: payload.uid });
 
-    if (!user || refreshToken !== user?.refreshToken) throw new UnauthorizedException(new InvalidAccessTokenError());
+    if (!user || refreshToken !== user?.refreshToken)
+      throw new UnauthorizedException(new InvalidAccessTokenError());
 
     const now = Math.floor(Date.now() / 1000);
 
-    if (!payload?.exp || payload.exp < now) throw new UnauthorizedException(new TokenExpiredError());
+    if (!payload?.exp || payload.exp < now)
+      throw new UnauthorizedException(new TokenExpiredError());
 
     const accessToken = await this.jwtService.encrypt(
       this.makeTokenPayloadForUserEntity(user),
@@ -173,13 +175,12 @@ export default class AuthService {
   }
 
   makeTokenPayloadForUserEntity(
-    user: UserEntity,
-    type: 'access-token' | 'refresh-token' = 'access-token',
+    user: UserEntity
   ): TokenPayloadEntity {
     return {
       role: user.role,
       uid: user.id,
-      email: user.email,
+      email: user.email
     };
   }
 }

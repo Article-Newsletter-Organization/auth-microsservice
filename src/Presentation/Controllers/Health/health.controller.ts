@@ -4,8 +4,8 @@ import { Response } from 'express';
 
 @Controller('/health')
 export class HealthController {
-    constructor(private readonly service: HealthService) {}
-  
+  constructor(private readonly service: HealthService) {}
+
   @Get('liveness')
   getLivenessInfo() {
     return {

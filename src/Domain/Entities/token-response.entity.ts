@@ -4,11 +4,11 @@ export class TokenResponseEntity {
   accessToken?: {
     token: string;
     expire: number;
-  }
+  };
   refreshToken?: {
     token: string;
     expire: number;
-  }
+  };
   userId: string;
   role: Role;
 }

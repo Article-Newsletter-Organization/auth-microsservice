@@ -1,14 +1,11 @@
 import { Injectable, LoggerService } from '@nestjs/common';
 import { winstonOptions } from 'src/Infra/winston';
-import { HttpException } from 'src/Presentation/Protocols';
 import { createLogger } from 'winston';
 import { LogModel } from './log.model';
 
 @Injectable()
 export class AppLoggerService implements LoggerService {
   private readonly logger = createLogger(winstonOptions);
-
-  constructor() {}
 
   log(message: string, name: string, extra: LogModel) {
     this.logger.info(`[${name}]: ${message}`, { name, ...extra });
