@@ -59,7 +59,7 @@ export class UserRepository {
 
   async createOne(
     userData: Omit<UserEntity, 'id' | 'createdAt' | 'modifiedAt'>,
-  ) {
+  ): Promise<UserEntity | null> {
     try {
       const entity = await this.prismaHelper.user.create({
         data: userData,
@@ -80,7 +80,7 @@ export class UserRepository {
     }
   }
 
-  async updateOne(userId: string, userData: Partial<UserEntity>) {
+  async updateOne(userId: string, userData: Partial<UserEntity>): Promise<UserEntity | null> {
     try {
       const entity = await this.prismaHelper.user.update({
         data: userData,

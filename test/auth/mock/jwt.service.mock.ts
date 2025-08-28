@@ -1,5 +1,4 @@
 import { Role } from '@prisma/client';
-import { AccessTokenPayloadEntity } from 'src/Domain/Entities';
 import { JwtService } from 'src/Infra/jwt';
 
 export namespace JwtServiceMock {
@@ -9,6 +8,7 @@ export namespace JwtServiceMock {
       Promise.resolve({
         uid: '<uuid>',
         role: Role['ADMIN'],
+        email: 'test@mail.com',
       }),
     );
   }

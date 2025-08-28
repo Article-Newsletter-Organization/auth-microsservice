@@ -1,7 +1,7 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Test, TestingModule } from '@nestjs/testing';
 import { BcryptService } from 'src/Infra/bcrypt';
-import AuthService from 'src/Presentetion/Controllers/Auth/auth.service';
+import AuthService from 'src/Presentation/Controllers/Auth/auth.service';
 import {
   BcryptServiceMock,
   CacheManagerMock,
@@ -11,8 +11,8 @@ import {
 } from './mock';
 import { UserRepository } from 'src/Data/Repositories';
 import { JwtService } from 'src/Infra/jwt';
-import { ForbiddenException } from 'src/Presentetion/Exceptions';
-import { EmailOrPasswordInvalidError } from 'src/Presentetion/Errors';
+import { ForbiddenException } from 'src/Presentation/Exceptions';
+import { EmailOrPasswordInvalidError } from 'src/Presentation/Errors';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -84,7 +84,9 @@ describe('AuthService', () => {
     });
 
     it('should return AccessTokenEntity data when everything is working correctly', async () => {
-      jwtServiceMock.encrypt.mockImplementation(() => 'fakeAccessToken');
+      jwtServiceMock.encrypt
+        .mockReturnValueOnce('fakeAccessToken')
+        .mockReturnValueOnce('fakeRefreshToken');
 
       const result = await authService.signIn({
         email: 'user@example.com',
@@ -92,8 +94,14 @@ describe('AuthService', () => {
       });
 
       expect(result).toEqual({
-        expire: ConfigModuleMock.configData.jwt.expiresIn,
-        token: 'fakeAccessToken',
+        accessToken: {
+          expire: ConfigModuleMock.configData.jwt.accessToken.expiresIn,
+          token: 'fakeAccessToken',
+        },
+        refreshToken: {
+          expire: ConfigModuleMock.configData.jwt.refreshToken.expiresIn,
+          token: 'fakeRefreshToken',
+        },
         userId: UserRepositoryMock.userEntityMock.id,
         role: UserRepositoryMock.userEntityMock.role,
       });
